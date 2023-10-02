@@ -97,7 +97,7 @@ struct HabitList: View {
                                         title: { Text("Done") },
                                         icon: { Image(systemName: "checkmark") })
                                 }.tint(.green)
-                                    .disabled(date > currDate)
+//                                    .disabled(date > currDate)
                                 
                                 
                                 Button() { // MARK: Skip
@@ -131,7 +131,7 @@ struct HabitList: View {
                                         title: { Text("Skip") },
                                         icon: { Image(systemName: "arrow.uturn.left") })
                                 }.tint(.blue)
-                                    .disabled(date > currDate)
+//                                    .disabled(date > currDate)
                             }
                     }
                 }

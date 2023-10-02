@@ -42,13 +42,13 @@ actor PreviewSampleData {
 // Default quakes for use in previews.
 extension Habit {
     static var oneTime: Habit {
-        .init(title: "Water the plants", weekDays: ["Mo", "Tu", "We", "Th"], freqType: "times", frequency: 1, imageName: "leaf")
+        .init(title: "Water the plants", weekDays: ["Mo", "We", "Th"], freqType: "times", frequency: 1, imageName: "leaf")
     }
     static var min: Habit {
         .init(title: "Brush teeth", weekDays: ["Su", "Mo", "Tu", "We", "Th", "Fr"], freqType: "minutes", frequency: 2, imageName: "mouth")
     }
     static var otherUnit: Habit {
-        .init(title: "Drink water", weekDays: ["Fr", "Sa"], freqType: "oz", frequency: 40, imageName: "waterbottle")
+        .init(title: "Drink water", weekDays: ["Mo", "We"], freqType: "oz", frequency: 40, imageName: "waterbottle")
     }
 }
 

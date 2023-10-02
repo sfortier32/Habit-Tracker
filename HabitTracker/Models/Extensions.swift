@@ -13,14 +13,27 @@ extension Text {
     func header2() -> Text { return self.font(.custom("FoundersGrotesk-Medium", size: 28)) }
     func header3() -> Text { return self.font(.custom("FoundersGrotesk-Medium", size: 26)) }
     func header4() -> Text { return self.font(.custom("FoundersGrotesk-Medium", size: 24)) }
+    func header5() -> Text { return self.font(.custom("FoundersGrotesk-Medium", size: 22)) }
+    
+    func bold1() -> Text { return self.font(.custom("FoundersGrotesk-Medium", size: 20)) }
+    func bold2() -> Text { return self.font(.custom("FoundersGrotesk-Medium", size: 18)) }
     
     func largerText() -> Text { return self.font(.custom("FoundersGrotesk-Regular", size: 26)) }
     func largeText() -> Text { return self.font(.custom("FoundersGrotesk-Regular", size: 24)) }
+    
     func text1() -> Text { return self.font(.custom("FoundersGrotesk-Regular", size: 22)) }
     func text2() -> Text { return self.font(.custom("FoundersGrotesk-Regular", size: 20)) }
     func text3() -> Text { return self.font(.custom("FoundersGrotesk-Regular", size: 18)) }
     func text4() -> Text { return self.font(.custom("FoundersGrotesk-Regular", size: 16)) }
     func text5() -> Text { return self.font(.custom("FoundersGrotesk-Regular", size: 14)) }
+    
+    func cust(_ size: Int, _ bold: Bool) -> Text {
+        if bold {
+            return self.font(.custom("FoundersGrotesk-Medium", size: CGFloat(size)))
+        } else {
+            return self.font(.custom("FoundersGrotesk-Regular", size: CGFloat(size)))
+        }
+    }
 }
 
 
@@ -42,6 +55,7 @@ extension Double {
 extension Color {
     static var background = Color("c-background")
     static var darkgray = Color("c-darkgray")
+    static var grayshadow = Color("c-grayshadow")
     static var shadow = Color("c-shadow")
     static var cream = Color("c-cream")
     static var blck = Color("c-black")

@@ -38,6 +38,7 @@
 		E476E7E62AC45B99006D0993 /* Achievements.swift in Sources */ = {isa = PBXBuildFile; fileRef = E476E7E52AC45B99006D0993 /* Achievements.swift */; };
 		E476E7EA2AC60E5F006D0993 /* Badges.swift in Sources */ = {isa = PBXBuildFile; fileRef = E476E7E92AC60E5F006D0993 /* Badges.swift */; };
 		E476E7EC2AC63080006D0993 /* Confetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = E476E7EB2AC63080006D0993 /* Confetti.swift */; };
+		E4C13A512ACB22BF0054FFF4 /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C13A502ACB22BF0054FFF4 /* AchievementsView.swift */; };
 		E4FB2C2F2AA7E56F00A428F1 /* PreviewSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FB2C2E2AA7E56F00A428F1 /* PreviewSampleData.swift */; };
 /* End PBXBuildFile section */
 
@@ -75,6 +76,7 @@
 		E476E7E52AC45B99006D0993 /* Achievements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Achievements.swift; sourceTree = "<group>"; };
 		E476E7E92AC60E5F006D0993 /* Badges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badges.swift; sourceTree = "<group>"; };
 		E476E7EB2AC63080006D0993 /* Confetti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Confetti.swift; sourceTree = "<group>"; };
+		E4C13A502ACB22BF0054FFF4 /* AchievementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsView.swift; sourceTree = "<group>"; };
 		E4FB2C2E2AA7E56F00A428F1 /* PreviewSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSampleData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -92,10 +94,11 @@
 		E425F9A92AA6335400824597 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				E4C13A502ACB22BF0054FFF4 /* AchievementsView.swift */,
+				E45A98DE2AA5681A0083C7D6 /* TabsView.swift */,
 				E416120C2AA6C029004397E6 /* HabitView.swift */,
 				E426B11C2AC21E4B00A86A2E /* TimerView.swift */,
 				E45A98E22AA5685B0083C7D6 /* TermsView.swift */,
-				E45A98DE2AA5681A0083C7D6 /* TabsView.swift */,
 				E4041FD72AB3CD9400789B87 /* SymbolPicker.swift */,
 			);
 			path = Helpers;
@@ -310,6 +313,7 @@
 				E476E7E62AC45B99006D0993 /* Achievements.swift in Sources */,
 				E476E7EC2AC63080006D0993 /* Confetti.swift in Sources */,
 				E426B1192AC203B700A86A2E /* Extensions.swift in Sources */,
+				E4C13A512ACB22BF0054FFF4 /* AchievementsView.swift in Sources */,
 				E425F9AB2AA6336300824597 /* ChangeName.swift in Sources */,
 				E45A98C82AA5670D0083C7D6 /* HabitTrackerApp.swift in Sources */,
 				E476E7E42AC45A98006D0993 /* Timer.swift in Sources */,

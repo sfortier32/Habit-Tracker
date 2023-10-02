@@ -8,6 +8,18 @@
 import SwiftUI
 import SwiftData
 
+class HabitInteractions: ObservableObject {
+    @Published var openHabitView: Bool
+    @Published var openTimer: Bool
+    @Published var habit: Habit
+    
+    init() {
+        self.openHabitView = false
+        self.openTimer = false
+        self.habit = Habit(title: "", weekDays: [], freqType: "", frequency: 0, imageName: "pills")
+    }
+}
+
 @Model
 class Habit {
     var title: String

@@ -19,11 +19,11 @@ struct HabitRow: View {
             // MARK: Image
             Button {
                 hInt.habit = hb
-                hInt.editHabit.toggle()
+                hInt.openHabitView.toggle()
             } label: {
                 HStack {
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color("c-grayShadow"))
+                        .fill(Color.grayshadow)
                         .frame(width: 36, height: 36)
                         .overlay {
                             Image(systemName: hb.imageName)

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ViewController: View {
     @StateObject var tm: TabModel = TabModel()
+    @StateObject var dm: DateModel = DateModel()
     @Environment(\.modelContext) var mc
     
     var body: some View {
@@ -17,13 +18,19 @@ struct ViewController: View {
         case .home:
             HomeView()
                 .environmentObject(tm)
+                .environmentObject(dm)
                 .modelContext(self.mc)
         case .stats:
             StatsView()
                 .environmentObject(tm)
+                .environmentObject(dm)
                 .modelContext(self.mc)
         case .settings:
             SettingsView()
+                .environmentObject(tm)
+                .modelContext(self.mc)
+        case .achievements:
+            AchievementsView()
                 .environmentObject(tm)
                 .modelContext(self.mc)
         }

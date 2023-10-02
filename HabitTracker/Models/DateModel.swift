@@ -9,6 +9,7 @@ import SwiftUI
 
 class DateModel: ObservableObject {
     @Published var formatter: DateFormatter
+    let weekdays: [String] = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
     
     init() {
         let fm = DateFormatter()
@@ -18,7 +19,9 @@ class DateModel: ObservableObject {
     
     func getDay(date: Date) -> String {
         formatter.dateFormat = "dd"
-        return formatter.string(from: date)
+        var day = formatter.string(from: date)
+        if day.starts(with: "0") { day.remove(at: day.startIndex) }
+        return day
     }
 
     func getWeekday(date: Date, short: Bool) -> String {
@@ -71,4 +74,18 @@ class DateModel: ObservableObject {
         return Date.now
     }
     
+    func getThisWeek() -> [Date] {
+        var calendar = Calendar.autoupdatingCurrent
+        calendar.firstWeekday = 1 // Start on Monday (or 1 for Sunday)
+        let today = calendar.startOfDay(for: Date())
+        var week = [Date]()
+        if let weekInterval = calendar.dateInterval(of: .weekOfYear, for: today) {
+            for i in 0...6 {
+                if let day = calendar.date(byAdding: .day, value: i, to: weekInterval.start) {
+                    week += [day]
+                }
+            }
+        }
+        return week
+    }
 }

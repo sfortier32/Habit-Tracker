@@ -111,7 +111,7 @@ struct SymbolPicker: View {
                 }
                 
             }
-        }.frame(height: 275)
+        }.frame(height: 300)
         .padding(.horizontal)
         .mask(
             VStack(spacing: 0) {

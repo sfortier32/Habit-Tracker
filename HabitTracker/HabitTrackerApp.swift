@@ -31,6 +31,7 @@ struct Habit_TrackerApp: App {
         fm.dateFormat = "MM-dd-YYYY"
         return fm.string(from: Date.now.removeTimeStamp)
     }()
+    @AppStorage("bigStreaks") var bigStreaks: Bool = true
     
     var body: some Scene {
         WindowGroup {
