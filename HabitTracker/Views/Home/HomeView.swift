@@ -11,9 +11,10 @@ import SwiftData
 struct HomeView: View {
     @Environment(\.modelContext) private var mc
     @EnvironmentObject var tm: TabModel
-    @EnvironmentObject var dm: DateModel
     
-    @State private var ud = UserDefaults.standard
+    @StateObject var dm: DateModel = DateModel()
+    @StateObject var hInt: HabitInteractions = HabitInteractions()
+    
     @State private var selected: Date = Date().removeTimeStamp
     @State private var selectedWeekday: String = DateModel().getWeekday(date: Date(), short: true)
     @State private var currDate = Date.now.removeTimeStamp
@@ -35,7 +36,7 @@ struct HomeView: View {
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Hey, ").font(.custom("FoundersGrotesk-Regular", size: 40)) +
-                        Text("\(ud.string(forKey: "name") ?? "You")!").font(.custom("FoundersGrotesk-Medium", size: 40))
+                        Text("\(UserDefaults.standard.string(forKey: "name") ?? "You")!").font(.custom("FoundersGrotesk-Medium", size: 40))
                     }.baselineOffset(-12)
                     Spacer()
                     
@@ -88,6 +89,7 @@ struct HomeView: View {
                 
                 // MARK: Habit List
                 HabitList(dte: selected, wkday: selectedWeekday, cnt: getCount())
+                    .environmentObject(hInt)
                 TabsView()
                     .environmentObject(tm)
             }
@@ -95,6 +97,10 @@ struct HomeView: View {
             if UserDefaults.standard.string(forKey: "today") != self.fm.string(from: currDate) {
                 updateHabits()
             }
+        })
+        .sheet(isPresented: $hInt.editHabit, content: {
+            let _ = print(hInt.habit)
+            HabitView(editor: true, pageOpen: $hInt.editHabit, habit: hInt.habit)
         })
     }
     func updateHabits() -> Void {

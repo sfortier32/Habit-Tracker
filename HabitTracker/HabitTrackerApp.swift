@@ -32,18 +32,12 @@ struct Habit_TrackerApp: App {
         return fm.string(from: Date.now.removeTimeStamp)
     }()
     
-    @StateObject var tm: TabModel = TabModel()
-    @StateObject var dm: DateModel = DateModel()
-    
-    
     var body: some Scene {
         WindowGroup {
             if !nameEntered {
                 TermsView()
             } else {
                 ViewController()
-                    .environmentObject(tm)
-                    .environmentObject(dm)
             }
         }
         .modelContainer(sharedModelContainer)

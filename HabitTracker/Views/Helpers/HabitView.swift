@@ -1,5 +1,5 @@
 //
-//  AddHabitView.swift
+//  HabitView.swift
 //  Habit Tracker
 //
 //  Created by Sophia Fortier on 9/4/23.
@@ -7,19 +7,21 @@
 
 import SwiftUI
 
-struct AddHabitView: View {
-    
-    @Binding var addHabit: Bool
-    @State private var title: String = ""
-    @State private var icon = "pills"
-    
-    @State private var freq: Double = 1
-    @State private var freqType: String = "times"
-    
-    @State private var days: [String] = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
-    @State private var selectedDays: [String] = []
+struct HabitView: View {
     
     @Environment(\.modelContext) private var mc
+    
+    var editingHabit: Habit? // Habit to be adjusted/created
+    var pageOpen: Binding<Bool> // Bool to open/close view
+    @State var editor: Bool // Page Name
+    
+    // MARK: Habit Features
+    @State private var title: String
+    @State private var icon: String
+    @State private var freq: Double
+    @State private var freqType: String
+    @State private var days: [String] = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+    @State private var selectedDays: [String]
     
     let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -31,6 +33,25 @@ struct AddHabitView: View {
         return formatter
     }()
     
+    init(editor: Bool, pageOpen: Binding<Bool>, habit: Habit?) {
+        self.editor = editor
+        self.pageOpen = pageOpen
+        
+        if habit != nil {
+            self.editingHabit = habit
+            self.title = habit!.title
+            self.icon = habit!.imageName
+            self.freq = habit!.frequency
+            self.freqType = habit!.freqType
+            self.selectedDays = habit!.weekDays
+        } else {
+            self.title = ""
+            self.icon = "pills"
+            self.freq = 1
+            self.freqType = "times"
+            self.selectedDays = []
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -38,9 +59,25 @@ struct AddHabitView: View {
                 .ignoresSafeArea()
             
             VStack {
-                Spacer().frame(height: 20)
-                Text("Add New Habit")
-                    .font(.custom("FoundersGrotesk-Medium", size: 24))
+                Spacer().frame(height: 15)
+                ZStack {
+                    HStack {
+                        Button {
+                            pageOpen.wrappedValue.toggle()
+                        } label: {
+                            Image(systemName: "plus")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 20)
+                                .rotationEffect(Angle(degrees: 45))
+                                .foregroundColor(.blck)
+                        }
+                        Spacer()
+                    }.padding(.horizontal)
+                    Text(editor ? "Edit Habit" : "Add New Habit")
+                        .font(.custom("FoundersGrotesk-Medium", size: 24))
+                        .baselineOffset(-8)
+                }
                 Spacer().frame(height: 25)
                 
                 ScrollView(showsIndicators: false) {
@@ -222,14 +259,23 @@ struct AddHabitView: View {
                 // MARK: Next
                 Spacer().frame(height: 25)
                 Button("Submit") {
-                    let newHabit = Habit(
-                        title: title,
-                        weekDays: selectedDays,
-                        freqType: freqType.lowercased(),
-                        frequency: freq,
-                        imageName: icon)
-                    self.mc.insert(newHabit)
-                    addHabit.toggle()
+                    if editor {
+                        editingHabit!.title = title
+                        editingHabit!.weekDays = selectedDays
+                        editingHabit!.freqType = freqType.lowercased()
+                        editingHabit!.frequency = freq
+                        editingHabit!.imageName = icon
+                        try? self.mc.save()
+                    } else {
+                        let newHabit = Habit(
+                            title: title,
+                            weekDays: selectedDays,
+                            freqType: freqType.lowercased(),
+                            frequency: freq,
+                            imageName: icon)
+                        self.mc.insert(newHabit)
+                    }
+                    pageOpen.wrappedValue.toggle()
                 }.disabled(title.isEmpty || selectedDays.isEmpty)
                 
             } // end vstack
@@ -240,5 +286,5 @@ struct AddHabitView: View {
 }
 
 #Preview {
-    AddHabitView(addHabit: .constant(true))
+    HabitView(editor: false, pageOpen: .constant(true), habit: nil)
 }

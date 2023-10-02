@@ -9,8 +9,7 @@ import SwiftUI
 //import SwiftData
 
 struct ViewController: View {
-    @EnvironmentObject var tm: TabModel
-    @EnvironmentObject var dm: DateModel
+    @StateObject var tm: TabModel = TabModel()
     @Environment(\.modelContext) var mc
     
     var body: some View {
@@ -18,7 +17,6 @@ struct ViewController: View {
         case .home:
             HomeView()
                 .environmentObject(tm)
-                .environmentObject(dm)
                 .modelContext(self.mc)
         case .stats:
             StatsView()
@@ -35,6 +33,5 @@ struct ViewController: View {
 #Preview {
     ViewController()
         .environmentObject(TabModel())
-        .environmentObject(DateModel())
         .modelContainer(PreviewSampleData.container)
 }

@@ -13,12 +13,13 @@ struct HabitList: View {
     var date: Date
     var count: Int
     
-    private var currDate = Date.now.removeTimeStamp
+    @State private var currDate = Date.now.removeTimeStamp
     @State private var deleteHabit: Bool = false
     @State private var habitToDelete: Habit? = nil
     
     @Query var habits: [Habit]
     @Environment(\.modelContext) private var mc
+    @EnvironmentObject var hInt: HabitInteractions
 
     init(
         dte: Date,
@@ -45,6 +46,7 @@ struct HabitList: View {
                 List(habits, id: \.self) { hb in
                     if hb.weekDays.contains(weekday) {
                         HabitRow(hb: hb, date: self.date)
+                            .environmentObject(hInt)
                             .listRowBackground(
                                 RoundedRectangle(cornerRadius: 25)
                                     .fill(Color("c-background"))
@@ -54,7 +56,7 @@ struct HabitList: View {
                             .padding(.all, 10)
                             .listRowSeparator(.hidden)
                         
-                            .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                            .swipeActions(edge: .leading, allowsFullSwipe: true) {
                                 Button(role: .destructive) {
                                     habitToDelete = hb
                                     deleteHabit.toggle()
@@ -63,7 +65,7 @@ struct HabitList: View {
                                 }
                             }
                         
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                 Button() { // MARK: Done
                                     if hb.done.contains(date) { // if marked as done
                                         hb.done.removeAll(where: { $0 == date })

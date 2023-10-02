@@ -63,7 +63,7 @@ struct TabsView: View {
                     }
                 }
             }.sheet(isPresented: $addHabit) {
-                AddHabitView(addHabit: $addHabit)
+                HabitView(editor: false, pageOpen: $addHabit, habit: nil)
             }
     }
 }
