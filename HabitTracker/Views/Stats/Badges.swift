@@ -34,9 +34,7 @@ struct BadgeView: View {
             .foregroundColor(Color.background)
             .overlay {
                 Image(imageName)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 100)
+                    .resize(h: 100)
                     .shadow(color: .black.opacity(0.25), radius: 7, x: 0, y: 5)
             }.opacity(unlocked ? 1 : 0.5)
     }

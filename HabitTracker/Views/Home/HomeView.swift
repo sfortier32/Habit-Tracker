@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
-    @Environment(\.modelContext) private var mc
+    @Environment(\.modelContext) var mc
     @EnvironmentObject var tm: TabModel
     @EnvironmentObject var dm: DateModel
     
@@ -46,9 +46,7 @@ struct HomeView: View {
                         addHabit.toggle()
                     } label: {
                         Image(systemName: "plus")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 21)
+                            .resize(h: 20)
                             .padding(.horizontal)
                             .offset(y: -1)
                     }
@@ -77,7 +75,7 @@ struct HomeView: View {
                     .padding(.bottom, 5)
                 
                 // MARK: Habit List
-                HabitList(dte: selected, wkday: selectedWeekday, cnt: getCount())
+                HabitList(date: selected, weekday: selectedWeekday, count: getCount())
                     .environmentObject(hInt)
                 TabsView()
                     .environmentObject(tm)
@@ -89,9 +87,11 @@ struct HomeView: View {
         })
         .sheet(isPresented: $hInt.openHabitView, content: {
             HabitView(editor: true, pageOpen: $hInt.openHabitView, habit: hInt.habit)
+                .environmentObject(hInt)
         })
         .sheet(isPresented: $addHabit, content: {
             HabitView(editor: false, pageOpen: $addHabit, habit: nil)
+                .environmentObject(hInt)
         })
     }
     func updateHabits() -> Void {
@@ -118,13 +118,177 @@ struct HomeView: View {
         }
     }
     func getCount() -> Int {
-        var count = 0
+        var cnt = 0
         for hb in habits {
-            if hb.weekDays.contains(self.selectedWeekday) {
-                count += 1
+            if hb.dateAdded <= currDate && hb.weekDays.contains(selectedWeekday) {
+                cnt += 1
             }
         }
-        return count
+        return cnt
+    }
+}
+
+
+// MARK: HabitList
+struct HabitList: View {
+    var weekday: String
+    var date: Date
+    var count: Int
+    
+    @State private var currDate = Date.now.removeTimeStamp
+    @State private var deleteHabit: Bool = false
+    @State private var habitToDelete: Habit? = nil
+    
+    @Environment(\.modelContext) private var mc
+    @EnvironmentObject var hInt: HabitInteractions
+    
+    @Query var habitsWOCateg: [Habit]
+    @Query(sort: \Category.orderIndex) var categs: [Category]
+
+    init(
+        date: Date,
+        weekday: String,
+        count: Int
+    ) {
+        self.weekday = weekday
+        self.date = date
+        self.count = count
+        
+        _habitsWOCateg = Query(
+            filter: #Predicate<Habit> { hb in
+                hb.category == nil
+            },
+            sort: \Habit.title,
+            order: .forward
+        )
+    }
+    var body: some View {
+        ZStack {
+            Color.cream.ignoresSafeArea()
+            
+            // MARK: Habit Cards
+            if count > 0 {
+                ScrollView {
+                    ForEach(habitsWOCateg, id: \.self) { hb in
+                        HabitRow(hb: hb, date: date)
+                        Text("Category: Uncategorized")
+                    }.id(UUID())
+                    ForEach(categs, id: \.self) { cg in
+                        ForEach(cg.habits, id: \.self) { hb in
+                            HabitRow(hb: hb, date: date)
+                            Text("Category: \(cg.title)")
+                        }.id(UUID())
+                    }.id(UUID())
+                }
+//                List(0..<order.count, id: \.self) { key in
+//                    let cgName = order[key]!
+//                    let mer = merged[cgName]!.filter({ hb in
+//                        hb.dateAdded <= date && hb.weekDays.contains(weekday)
+//                    })
+//                    if mer.count > 0 {
+//                        Section {
+//                            ForEach(mer, id: \.self) { hb in
+//                                HabitRow(hb: hb, date: date)
+//                                    .environmentObject(hInt)
+//                                    .listStyle
+//                                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+//                                        Button(role: .destructive) {
+//                                            habitToDelete = hb
+//                                            deleteHabit.toggle()
+//                                        } label: {
+//                                            Image(systemName: "trash")
+//                                        }
+//                                    }
+//                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+//                                        Button() { // MARK: Done
+//                                            if hb.done.contains(date) { // if marked as done
+//                                                hb.done.removeAll(where: { $0 == date })
+//                                                if date < currDate { // return to missed
+//                                                    hb.missed.append(date)
+//                                                    hb.missed.sort()
+//                                                } else { // return to not done
+//                                                    hb.notDone.append(date)
+//                                                    hb.notDone.sort()
+//                                                }
+//                                                hb.allTypesDone.removeAll(where: { $0 == date })
+//                                            } else {
+//                                                hb.done.append(date)
+//                                                hb.done.sort()
+//                                                if hb.notDone.contains(date) { // notDone -> done
+//                                                    hb.notDone.removeAll(where: { $0 == date })
+//                                                    hb.allTypesDone.append(date)
+//                                                    hb.allTypesDone.sort()
+//                                                } else if hb.skipped.contains(date) { // skipped -> done
+//                                                    hb.skipped.removeAll(where: { $0 == date })
+//                                                } else { // in missed
+//                                                    hb.missed.removeAll(where: { $0 == date }) // missed -> done
+//                                                    hb.allTypesDone.append(date)
+//                                                    hb.allTypesDone.sort()
+//                                                }
+//                                            }
+//                                        } label: {
+//                                            Label(
+//                                                title: { Text("Done") },
+//                                                icon: { Image(systemName: "checkmark") })
+//                                        }.tint(.green)
+//                                        
+//                                        Button() { // MARK: Skip
+//                                            if hb.skipped.contains(date) { // if marked as skipped
+//                                                hb.skipped.removeAll(where: { $0 == date })
+//                                                if date < currDate { // return to missed
+//                                                    hb.missed.append(date)
+//                                                    hb.missed.sort()
+//                                                } else { // return to not done
+//                                                    hb.notDone.append(date)
+//                                                    hb.notDone.sort()
+//                                                }
+//                                                hb.allTypesDone.removeAll(where: { $0 == date })
+//                                            } else {
+//                                                hb.skipped.append(date)
+//                                                hb.skipped.sort()
+//                                                if hb.notDone.contains(date) { // notDone -> skipped
+//                                                    hb.notDone.removeAll(where: { $0 == date })
+//                                                    hb.allTypesDone.append(date)
+//                                                    hb.allTypesDone.sort()
+//                                                } else if hb.done.contains(date) { // done -> skipped
+//                                                    hb.done.removeAll(where: { $0 == date })
+//                                                } else { // missed -> skipped
+//                                                    hb.missed.removeAll(where: { $0 == date })
+//                                                    hb.allTypesDone.append(date)
+//                                                    hb.allTypesDone.sort()
+//                                                }
+//                                            }
+//                                        } label: {
+//                                            Label(
+//                                                title: { Text("Skip") },
+//                                                icon: { Image(systemName: "arrow.uturn.left") })
+//                                        }.tint(.blue)
+//                                        
+//                                    }
+//                            }
+//                        } header: {
+//                            Text(cgName).textCase(nil)
+//                        }
+//                    }
+//                }.id(UUID())
+//                    .scrollContentBackground(.hidden)
+//                    .listStyle(GroupedListStyle())
+//                    .font(.custom("FoundersGrotesk-Regular", size: 20))
+//                    .baselineOffset(-5)
+//                    .listSectionSpacing(8)
+                
+            } else {
+                VStack {
+                    Spacer()
+                    Spacer()
+                    Text("No tasks today!").header2().foregroundColor(.blck)
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                }
+            }
+            
+        }.font(.custom("FoundersGrotesk-Regular", size: 20))
     }
 }
 
@@ -133,95 +297,7 @@ struct HomeView: View {
         .environmentObject(TabModel())
         .environmentObject(DateModel())
         .modelContainer(PreviewSampleData.container)
-        .modelContainer(for: [Habit.self, Achievements.self], inMemory: true)
+        .modelContainer(for: [Habit.self, Category.self, Achievements.self], inMemory: true)
 }
 
 
-struct DateView: View {
-    var cur: Date
-    var selected: Date
-    var day: String
-    var weekday: String
-    
-    @Query var habits: [Habit]
-    @Environment(\.modelContext) private var mc
-
-    init(
-        _ current: Date,
-        _ select: Date,
-        _ dy: String,
-        _ wkday: String
-    ) {
-        cur = current
-        selected = select
-        day = dy
-        weekday = wkday
-        
-        _habits = Query(
-            filter: #Predicate<Habit> {
-                cur >= $0.dateAdded
-            },
-            sort: \Habit.title,
-            order: .forward
-        )
-    }
-    var body: some View {
-        let count = getHabitsOn(selected)
-        if cur != selected {
-            if count == 0 {
-                VStack(alignment: .center) {
-                    Text(weekday).header5()
-                        .foregroundColor(.gray)
-                        .textCase(.uppercase)
-                    Spacer()
-                        .frame(height: 12)
-                    Text(day)
-                        .foregroundColor(.blck).header5()
-                }.frame(width: 50, height: 90)
-                    .cornerRadius(40)
-            } else { // habits occur
-                VStack(alignment: .center) {
-                    Text(weekday).header5()
-                        .foregroundColor(.gray)
-                        .textCase(.uppercase)
-                        .padding(.top, 2)
-                        .padding(.bottom, -7)
-                    RoundedRectangle(cornerRadius: 35)
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(.grayshadow)
-                        .overlay {
-                            Text(day)
-                                .foregroundColor(.blck).header5()
-                                .baselineOffset(-5)
-                        }
-                }.frame(width: 50, height: 85)
-                    .cornerRadius(40)
-                    .padding(.top, 5)
-            }
-        } else {
-            VStack(alignment: .center) {
-                Text(weekday).header5()
-                    .foregroundColor(.cream)
-                    .textCase(.uppercase)
-                    .padding(.top, -1)
-                    .padding(.bottom, 2)
-                Spacer()
-                    .frame(height: 10)
-                Text(day)
-                    .foregroundColor(.cream).header5()
-            }.frame(width: 50, height: 90)
-                .background(Color.blck)
-                .cornerRadius(40)
-        }
-    }
-    func getHabitsOn(_ date: Date) -> Int {
-        if self.habits == [] { return 0 }
-        var res: [Habit] = []
-        for hb in self.habits {
-            if hb.weekDays.contains(weekday) {
-                res.append(hb)
-            }
-        }
-        return res.count
-    }
-}

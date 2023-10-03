@@ -38,19 +38,32 @@ class Habit {
     
     var imageName: String
     var streak: Int = 0
+    var category: Category?
     
-    @Relationship(inverse: \Category.habits) var categories: [Category] = []
-    
+    init(title: String, weekDays: [String], freqType: String, frequency: Double, imageName: String, category: Category) {
+        self.title = title
+        self.weekDays = weekDays
+        self.freqType = freqType
+        self.frequency = frequency
+        self.dateAdded = Date().removeTimeStamp
+        self.firstOccurence = DateModel().getFirstOccurence(date: Date().removeTimeStamp, occurences: weekDays)
+        self.imageName = imageName
+        self.category = category
+        
+        for day in DateModel().getDateCarousel() {
+            let dy = day.removeTimeStamp
+            self.notDone.append(dy)
+        }
+    }
     init(title: String, weekDays: [String], freqType: String, frequency: Double, imageName: String) {
         self.title = title
         self.weekDays = weekDays
         self.freqType = freqType
         self.frequency = frequency
-        
         self.dateAdded = Date().removeTimeStamp
         self.firstOccurence = DateModel().getFirstOccurence(date: Date().removeTimeStamp, occurences: weekDays)
-        
         self.imageName = imageName
+        self.category = nil
         
         for day in DateModel().getDateCarousel() {
             let dy = day.removeTimeStamp

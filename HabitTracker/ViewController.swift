@@ -29,10 +29,10 @@ struct ViewController: View {
             SettingsView()
                 .environmentObject(tm)
                 .modelContext(self.mc)
-        case .achievements:
-            AchievementsView()
-                .environmentObject(tm)
-                .modelContext(self.mc)
+//        case .achievements:
+//            AchievementsView()
+//                .environmentObject(tm)
+//                .modelContext(self.mc)
         }
     }
 }
@@ -41,4 +41,5 @@ struct ViewController: View {
     ViewController()
         .environmentObject(TabModel())
         .modelContainer(PreviewSampleData.container)
+        .modelContainer(for: [Habit.self, Category.self, Achievements.self], inMemory: true)
 }

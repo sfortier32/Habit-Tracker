@@ -17,17 +17,16 @@ actor PreviewSampleData {
 
     static var inMemoryContainer: () throws -> ModelContainer = {
         let schema = Schema([
-            Categories.self,
-            Category.self,
             Habit.self,
+            Category.self,
             Achievements.self
         ])
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try! ModelContainer(for: schema, configurations: [configuration])
         let sampleData: [any PersistentModel] = [
-            Habit.min,
-            Habit.oneTime,
-            Habit.otherUnit,
+            Habit.one,
+            Habit.two,
+            Habit.three,
             Achievements.test
         ]
         Task { @MainActor in
@@ -41,17 +40,26 @@ actor PreviewSampleData {
 
 // Default quakes for use in previews.
 extension Habit {
-    static var oneTime: Habit {
-        .init(title: "Water the plants", weekDays: ["Mo", "We", "Th"], freqType: "times", frequency: 1, imageName: "leaf")
+    static var one: Habit {
+        .init(title: "Water the plants", weekDays: ["Mo", "Tu", "We", "Th"], freqType: "times", frequency: 1, imageName: "leaf")
     }
-    static var min: Habit {
-        .init(title: "Brush teeth", weekDays: ["Su", "Mo", "Tu", "We", "Th", "Fr"], freqType: "minutes", frequency: 2, imageName: "mouth")
+    static var two: Habit {
+        .init(title: "Brush teeth", weekDays: ["Su", "Mo", "Tu", "We", "Th", "Fr"], freqType: "minutes", frequency: 2, imageName: "mouth", category: Category.morning)
     }
-    static var otherUnit: Habit {
-        .init(title: "Drink water", weekDays: ["Mo", "We"], freqType: "oz", frequency: 40, imageName: "waterbottle")
+    static var three: Habit {
+        .init(title: "Drink water", weekDays: ["Mo", "Tu", "We"], freqType: "oz", frequency: 40, imageName: "waterbottle")
     }
 }
 
+
+extension Category {
+    static var morning: Category {
+        .init(title: "Morning", orderIndex: 0)
+    }
+    static var evening: Category {
+        .init(title: "Evening", orderIndex: 1)
+    }
+}
 extension Achievements {
     static var test: Achievements {
         .init()

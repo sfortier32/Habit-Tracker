@@ -37,11 +37,9 @@ struct StatsView: View {
                             .baselineOffset(-8)
                         Button {
                             bigStreaks.toggle()
-                            UserDefaults.standard.set(bigStreaks, forKey: "bigStreaks")
                         } label: {
                             Image(systemName: bigStreaks ? "arrow.down.left.square" : "arrow.up.right.square")
-                                .resizable().aspectRatio(contentMode: .fit)
-                                .frame(height: 24)
+                                .resize(h: 24)
                         }
                     }.padding(.horizontal)
                         .padding(.top, 4)
@@ -60,9 +58,7 @@ struct StatsView: View {
                                                     Text("\(hb.streak)").cust(32, true)
                                                     Spacer()
                                                     Image(systemName: hb.imageName)
-                                                        .resizable()
-                                                        .aspectRatio(contentMode: .fit)
-                                                        .frame(width: 25, height: 25)
+                                                        .resize(w: 24, h: 24)
                                                 } // end hstack
                                                 Spacer()
                                                 Text("\(hb.title)").text1()
@@ -86,9 +82,7 @@ struct StatsView: View {
 //                                                .border(.red)
                                             Spacer().frame(width: 20)
                                             Image(systemName: hb.imageName)
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width: 24, height: 24)
+                                                .resize(w: 24, h: 24)
                                         }.padding(.all, 18) // end hstack
 //                                            .border(.black)
                                     }
@@ -119,11 +113,10 @@ struct StatsView: View {
                                                 .padding(.bottom, -2)
                                             RoundedRectangle(cornerRadius: 15)
                                                 .frame(width: 26, height: 26)
-                                                .foregroundColor(!hb.weekDays.contains(weekday) ? .grayshadow.opacity(.5) : (
+                                                .foregroundColor(!hb.weekDays.contains(weekday) || hb.notDone.contains(day) ? .grayshadow : (
                                                     hb.done.contains(day) ? .grn : (
-                                                    hb.missed.contains(day) ? .red : (
-                                                    hb.skipped.contains(day) ? .blue : .grayshadow))))
-                                        }.frame(width: 30)
+                                                        hb.missed.contains(day) ? .red : .blue)))
+                                        }.frame(width: 26)
                                     }
                                 }
                             }.padding()
@@ -136,29 +129,8 @@ struct StatsView: View {
                     .padding(.bottom, 20)
                     
                 }
+                .VMask()
                 .foregroundColor(.blck)
-                .mask(
-                    VStack(spacing: 0) {
-                        // Top gradient
-                        LinearGradient(gradient:
-                           Gradient(
-                               colors: [Color.black.opacity(0), Color.black]),
-                               startPoint: .top, endPoint: .bottom
-                           )
-                           .frame(height: 10)
-
-                        // Middle
-                        Rectangle().fill(Color.black)
-
-                        // Bottom gradient
-                        LinearGradient(gradient:
-                           Gradient(
-                               colors: [Color.black, Color.black.opacity(0)]),
-                               startPoint: .top, endPoint: .bottom
-                           )
-                           .frame(height: 10)
-                    }
-                 )
                 
                 
                 TabsView()
@@ -166,6 +138,9 @@ struct StatsView: View {
             }
         }.onAppear(perform: {
             self.calculateStreaks()
+        })
+        .onDisappear(perform: {
+            UserDefaults.standard.set(bigStreaks, forKey: "bigStreaks")
         })
     }
     func calculateStreaks() -> Void {
@@ -184,5 +159,5 @@ struct StatsView: View {
         .environmentObject(TabModel())
         .environmentObject(DateModel())
         .modelContainer(PreviewSampleData.container)
-        .modelContainer(for: [Habit.self, Achievements.self], inMemory: true)
+        .modelContainer(for: [Habit.self, Category.self, Achievements.self], inMemory: true)
 }

@@ -7,33 +7,130 @@
 
 import SwiftUI
 
-// MARK: Text
-extension Text {
-    func header1() -> Text { return self.font(.custom("FoundersGrotesk-Medium", size: 38)) }
-    func header2() -> Text { return self.font(.custom("FoundersGrotesk-Medium", size: 28)) }
-    func header3() -> Text { return self.font(.custom("FoundersGrotesk-Medium", size: 26)) }
-    func header4() -> Text { return self.font(.custom("FoundersGrotesk-Medium", size: 24)) }
-    func header5() -> Text { return self.font(.custom("FoundersGrotesk-Medium", size: 22)) }
+extension View {
+    var listStyle: some View {
+        return self.listRowBackground(
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color("c-background"))
+                .padding(.horizontal, 15).padding(.vertical, 5)
+            )
+            .padding(.all, 12)
+            .listRowSeparator(.hidden)
+    }
+    var customStyle: some View {
+        return self.scrollContentBackground(.hidden)
+        .listStyle(PlainListStyle())
+        .font(.custom("FoundersGrotesk-Regular", size: 20))
+        .baselineOffset(-5)
+    }
     
-    func bold1() -> Text { return self.font(.custom("FoundersGrotesk-Medium", size: 20)) }
-    func bold2() -> Text { return self.font(.custom("FoundersGrotesk-Medium", size: 18)) }
+    // MARK: Text
+    func header1() -> some View { return self.font(.custom("FoundersGrotesk-Medium", size: 38)) }
+    func header2() -> some View { return self.font(.custom("FoundersGrotesk-Medium", size: 28)) }
+    func header3() -> some View { return self.font(.custom("FoundersGrotesk-Medium", size: 26)) }
+    func header4() -> some View { return self.font(.custom("FoundersGrotesk-Medium", size: 24)) }
+    func header5() -> some View { return self.font(.custom("FoundersGrotesk-Medium", size: 22)) }
     
-    func largerText() -> Text { return self.font(.custom("FoundersGrotesk-Regular", size: 26)) }
-    func largeText() -> Text { return self.font(.custom("FoundersGrotesk-Regular", size: 24)) }
+    func bold1() -> some View { return self.font(.custom("FoundersGrotesk-Medium", size: 20)) }
+    func bold2() -> some View { return self.font(.custom("FoundersGrotesk-Medium", size: 18)) }
     
-    func text1() -> Text { return self.font(.custom("FoundersGrotesk-Regular", size: 22)) }
-    func text2() -> Text { return self.font(.custom("FoundersGrotesk-Regular", size: 20)) }
-    func text3() -> Text { return self.font(.custom("FoundersGrotesk-Regular", size: 18)) }
-    func text4() -> Text { return self.font(.custom("FoundersGrotesk-Regular", size: 16)) }
-    func text5() -> Text { return self.font(.custom("FoundersGrotesk-Regular", size: 14)) }
+    func largerText() -> some View { return self.font(.custom("FoundersGrotesk-Regular", size: 26)) }
+    func largeText() -> some View { return self.font(.custom("FoundersGrotesk-Regular", size: 24)) }
     
-    func cust(_ size: Int, _ bold: Bool) -> Text {
+    func text1() -> some View { return self.font(.custom("FoundersGrotesk-Regular", size: 22)) }
+    func text2() -> some View { return self.font(.custom("FoundersGrotesk-Regular", size: 20)) }
+    func text3() -> some View { return self.font(.custom("FoundersGrotesk-Regular", size: 18)) }
+    func text4() -> some View { return self.font(.custom("FoundersGrotesk-Regular", size: 16)) }
+    func text5() -> some View { return self.font(.custom("FoundersGrotesk-Regular", size: 14)) }
+    
+    func cust(_ size: Int, _ bold: Bool) -> some View {
         if bold {
             return self.font(.custom("FoundersGrotesk-Medium", size: CGFloat(size)))
         } else {
             return self.font(.custom("FoundersGrotesk-Regular", size: CGFloat(size)))
         }
     }
+    
+    // MARK: Positions
+    func center() -> some View {
+        return self.frame(maxWidth: .infinity, alignment: .center)
+    }
+    func leading() -> some View {
+        return self.frame(maxWidth: .infinity, alignment: .leading)
+    }
+    func trailing() -> some View {
+        return self.frame(maxWidth: .infinity, alignment: .trailing)
+    }
+    
+    
+    // MARK: Spacing
+    func VSpacer(_ h: Int) -> some View {
+        return Spacer().frame(height: CGFloat(h))
+    }
+    func Separator() -> some View {
+        return {
+            VStack {
+                VSpacer(24)
+                Divider()
+                VSpacer(24)
+            }
+        }()
+    }
+    
+    // MARK: Masks
+    func VMask() -> some View {
+        self.mask(
+            VStack(spacing: 0) {
+                LinearGradient(gradient: Gradient(
+                    colors: [Color.black.opacity(0), Color.black]),
+                    startPoint: .top, endPoint: .bottom
+                ).frame(height: 10)
+                
+                Rectangle().fill(Color.black)
+                
+                LinearGradient(gradient: Gradient(
+                    colors: [Color.black, Color.black.opacity(0)]),
+                    startPoint: .top, endPoint: .bottom
+                ).frame(height: 10)
+            }
+        )
+    }
+    func HMask() -> some View {
+        self.mask(
+            VStack(spacing: 0) {
+                LinearGradient(gradient: Gradient(
+                    colors: [Color.black.opacity(0), Color.black]),
+                    startPoint: .leading, endPoint: .trailing
+                ).frame(height: 10)
+                
+                Rectangle().fill(Color.black)
+                
+                LinearGradient(gradient: Gradient(
+                    colors: [Color.black, Color.black.opacity(0)]),
+                    startPoint: .leading, endPoint: .trailing
+                ).frame(height: 10)
+            }
+        )
+    }
+}
+
+// MARK: Image
+extension Image {
+    func resize(w: Int, h: Int) -> some View {
+        return self.resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: CGFloat(w), height: CGFloat(h))
+        }
+    func resize(w: Int) -> some View {
+        return self.resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: CGFloat(w))
+        }
+    func resize(h: Int) -> some View {
+        return self.resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(height: CGFloat(h))
+        }
 }
 
 
@@ -50,7 +147,6 @@ extension Double {
     }
 }
 
-
 // MARK: Color
 extension Color {
     static var background = Color("c-background")
@@ -62,12 +158,10 @@ extension Color {
     static var grn = Color("c-green")
 }
 
-
 // MARK: PresentationDetent
 extension PresentationDetent {
     static let small = Self.fraction(0.35)
 }
-
 
 // MARK: Date
 extension Date {
@@ -80,4 +174,3 @@ extension Date {
 func getDateAhead(val: Int) -> Date {
     return Calendar.current.date(byAdding: .day, value: val, to: Date().removeTimeStamp)!
 }
-

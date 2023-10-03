@@ -27,9 +27,7 @@ struct HabitRow: View {
                         .frame(width: 36, height: 36)
                         .overlay {
                             Image(systemName: hb.imageName)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 18, height: 18)
+                                .resize(w: 18, h: 18)
                         }
                         .padding(.trailing, 8)
                         .padding(.bottom, 10)
@@ -43,9 +41,7 @@ struct HabitRow: View {
                             if self.date == hb.dateAdded || self.date == hb.firstOccurence {
                                 HStack {
                                     Image(systemName: "burst.fill")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(height: 12)
+                                        .resize(h: 12)
                                     Text("New").text4()
                                         .baselineOffset(-5)
                                 }.foregroundColor(.pink)
@@ -68,9 +64,7 @@ struct HabitRow: View {
                                 .strikethrough()
                             HStack {
                                 Image(systemName: "arrow.uturn.left")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: 10)
+                                    .resize(h: 10)
                                 Text("Skipped").text4()
                                     .baselineOffset(-6)
                             }.foregroundColor(.blue)
@@ -83,9 +77,7 @@ struct HabitRow: View {
                                 .strikethrough()
                             HStack {
                                 Image(systemName: "checkmark")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: 10)
+                                    .resize(h: 10)
                                 Text("Done").text4()
                                     .baselineOffset(-6)
                             }.foregroundColor(.green)
@@ -108,9 +100,8 @@ struct HabitRow: View {
                     Spacer()
                     if hb.freqType == "minutes" {
                         Image(systemName: "deskclock.fill")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 24).padding(.top, 5)
+                            .resize(h: 24)
+                            .padding(.top, 5)
                     } else {
                         Text(hb.frequency.cleanValue).largerText()
                             .frame(height: 7).padding(.top, 16)

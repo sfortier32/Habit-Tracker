@@ -5,26 +5,19 @@
 //  Created by Sophia Fortier on 9/25/23.
 //
 
+import SwiftUI
 import SwiftData
-import Foundation
 
 @Model
 class Category {
+    
+    var orderIndex: Int
+    var habits: [Habit]
     var title: String
     
-    init(title: String) {
+    init(title: String, orderIndex: Int) {
+        self.habits = []
         self.title = title
+        self.orderIndex = orderIndex
     }
-    
-    @Relationship var habits: [Habit] = []
-}
-
-@Model
-class Categories {
-    var categories: [Category]
-    
-    init() {
-        self.categories = []
-    }
-    
 }

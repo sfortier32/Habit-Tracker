@@ -58,8 +58,17 @@ struct SettingsView: View {
                                 .padding(.horizontal, 15).padding(.vertical, 5)
                         ).padding(.all, 12).listRowSeparator(.hidden)
                         
-                        Button("Reset Achievements") {
-                            resetAchievementsAlert.toggle()
+//                        Button("Reset Achievements") {
+//                            resetAchievementsAlert.toggle()
+//                        }.listRowBackground(
+//                            RoundedRectangle(cornerRadius: 15)
+//                                .fill(Color("c-background"))
+//                                .padding(.horizontal, 15).padding(.vertical, 5)
+//                        ).padding(.all, 12).listRowSeparator(.hidden)
+                        
+                        Button("Reset Categories") {
+                            // TODO: Separate into function with alert
+                            try? mc.delete(model: Category.self)
                         }.listRowBackground(
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(Color("c-background"))
@@ -119,5 +128,5 @@ struct SettingsView: View {
 #Preview {
     SettingsView()
         .environmentObject(TabModel())
-        .modelContainer(for: [Habit.self, Achievements.self], inMemory: true)
+        .modelContainer(for: [Habit.self, Category.self, Achievements.self], inMemory: true)
 }

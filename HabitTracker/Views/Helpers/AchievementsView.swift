@@ -12,7 +12,7 @@ struct AchievementsView: View {
     @State var count = 0
     @State var confettiVisible = true
     
-    @EnvironmentObject var tm: TabModel
+//    @EnvironmentObject var tm: TabModel
     @Query var ach: [Achievements]
     @Query var habits: [Habit]
     
@@ -70,33 +70,11 @@ struct AchievementsView: View {
                         }
                         BadgeListView(badges: ach[0].tasks)
                     }.padding(.bottom, 12)
-                } // end scrollview
-                .mask(
-                    VStack(spacing: 0) {
-                        // Top gradient
-                        LinearGradient(gradient:
-                           Gradient(
-                               colors: [Color.black.opacity(0), Color.black]),
-                               startPoint: .top, endPoint: .bottom
-                           )
-                           .frame(height: 10)
-
-                        // Middle
-                        Rectangle().fill(Color.black)
-
-                        // Bottom gradient
-                        LinearGradient(gradient:
-                           Gradient(
-                               colors: [Color.black, Color.black.opacity(0)]),
-                               startPoint: .top, endPoint: .bottom
-                           )
-                           .frame(height: 10)
-                    }
-                 )
+                }
                 
                 Spacer()
                 TabsView()
-                    .environmentObject(tm)
+//                    .environmentObject(tm)
             }
         }
     }
@@ -153,5 +131,5 @@ struct AchievementsView: View {
     AchievementsView()
         .environmentObject(TabModel())
         .modelContainer(PreviewSampleData.container)
-        .modelContainer(for: [Habit.self, Achievements.self], inMemory: true)
+        .modelContainer(for: [Habit.self, Category.self, Achievements.self], inMemory: true)
 }

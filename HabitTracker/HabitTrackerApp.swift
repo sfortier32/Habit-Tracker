@@ -12,6 +12,7 @@ import SwiftData
 struct Habit_TrackerApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
+            Category.self,
             Habit.self,
             Achievements.self
         ])

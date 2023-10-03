@@ -26,9 +26,7 @@ struct TabsView: View {
                                 tm.selected = tabType
                             } label: {
                                 Image(systemName: name)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: 30)
+                                    .resize(h: 30)
                                     .foregroundColor(.grayshadow.opacity(0.5))
                             }
                         }

@@ -93,5 +93,5 @@ struct TermsView: View {
 
 #Preview {
     TermsView()
-        .modelContainer(for: [Habit.self], inMemory: true)
+        .modelContainer(for: [Habit.self, Category.self, Achievements.self], inMemory: true)
 }
