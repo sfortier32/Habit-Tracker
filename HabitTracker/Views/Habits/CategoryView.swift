@@ -56,6 +56,7 @@ struct CategoryList: View {
     @Environment(\.modelContext) var mc
     @EnvironmentObject var cInt: CategoryInteractions
     @Query(sort: \Category.orderIndex) private var categs: [Category]
+    @Query var habits: [Habit]
     
     var body: some View {
         List {
@@ -71,7 +72,7 @@ struct CategoryList: View {
                             .bold().foregroundColor(Color.blck.opacity(0.8))
                     }
                 }
-            }.listStyle
+            }.customListButton
             
             ForEach(categs) { cg in
                 Button {
@@ -86,7 +87,7 @@ struct CategoryList: View {
                                 .bold().foregroundColor(Color.blck.opacity(0.8))
                         }
                     }
-                }.listStyle
+                }.customListButton
                 .swipeActions(edge: .trailing, allowsFullSwipe: true, content: {
                     Button(role: .destructive) {
                         // TODO: Add message
@@ -103,7 +104,7 @@ struct CategoryList: View {
                     categ.orderIndex = index
                 }
             }
-        }.customStyle
+        }.customListStyle
     }
 }
 
@@ -146,6 +147,7 @@ struct AddCategory: View {
                 Button("Submit") {
                     let category = Category(title: title, orderIndex: categs.count)
                     mc.insert(category)
+                    cInt.selected = category
                     bool.toggle()
                 }.disabled(title.isEmpty)
                     .largeText()

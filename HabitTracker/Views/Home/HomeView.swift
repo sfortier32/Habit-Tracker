@@ -42,13 +42,13 @@ struct HomeView: View {
                     Spacer()
                     
                     // MARK: Add Habit
+                    
                     Button {
                         addHabit.toggle()
                     } label: {
                         Image(systemName: "plus")
                             .resize(h: 20)
                             .padding(.horizontal)
-                            .offset(y: -1)
                     }
                 }.padding(.horizontal)
                     .padding(.top, 12)
@@ -88,10 +88,12 @@ struct HomeView: View {
         .sheet(isPresented: $hInt.openHabitView, content: {
             HabitView(editor: true, pageOpen: $hInt.openHabitView, habit: hInt.habit)
                 .environmentObject(hInt)
+                .interactiveDismissDisabled()
         })
         .sheet(isPresented: $addHabit, content: {
             HabitView(editor: false, pageOpen: $addHabit, habit: nil)
                 .environmentObject(hInt)
+                .interactiveDismissDisabled()
         })
     }
     func updateHabits() -> Void {
@@ -128,170 +130,6 @@ struct HomeView: View {
     }
 }
 
-
-// MARK: HabitList
-struct HabitList: View {
-    var weekday: String
-    var date: Date
-    var count: Int
-    
-    @State private var currDate = Date.now.removeTimeStamp
-    @State private var deleteHabit: Bool = false
-    @State private var habitToDelete: Habit? = nil
-    
-    @Environment(\.modelContext) private var mc
-    @EnvironmentObject var hInt: HabitInteractions
-    
-    @Query var habitsWOCateg: [Habit]
-    @Query(sort: \Category.orderIndex) var categs: [Category]
-
-    init(
-        date: Date,
-        weekday: String,
-        count: Int
-    ) {
-        self.weekday = weekday
-        self.date = date
-        self.count = count
-        
-        _habitsWOCateg = Query(
-            filter: #Predicate<Habit> { hb in
-                hb.category == nil
-            },
-            sort: \Habit.title,
-            order: .forward
-        )
-    }
-    var body: some View {
-        ZStack {
-            Color.cream.ignoresSafeArea()
-            
-            // MARK: Habit Cards
-            if count > 0 {
-                ScrollView {
-                    ForEach(habitsWOCateg, id: \.self) { hb in
-                        HabitRow(hb: hb, date: date)
-                        Text("Category: Uncategorized")
-                    }.id(UUID())
-                    ForEach(categs, id: \.self) { cg in
-                        ForEach(cg.habits, id: \.self) { hb in
-                            HabitRow(hb: hb, date: date)
-                            Text("Category: \(cg.title)")
-                        }.id(UUID())
-                    }.id(UUID())
-                }
-//                List(0..<order.count, id: \.self) { key in
-//                    let cgName = order[key]!
-//                    let mer = merged[cgName]!.filter({ hb in
-//                        hb.dateAdded <= date && hb.weekDays.contains(weekday)
-//                    })
-//                    if mer.count > 0 {
-//                        Section {
-//                            ForEach(mer, id: \.self) { hb in
-//                                HabitRow(hb: hb, date: date)
-//                                    .environmentObject(hInt)
-//                                    .listStyle
-//                                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
-//                                        Button(role: .destructive) {
-//                                            habitToDelete = hb
-//                                            deleteHabit.toggle()
-//                                        } label: {
-//                                            Image(systemName: "trash")
-//                                        }
-//                                    }
-//                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-//                                        Button() { // MARK: Done
-//                                            if hb.done.contains(date) { // if marked as done
-//                                                hb.done.removeAll(where: { $0 == date })
-//                                                if date < currDate { // return to missed
-//                                                    hb.missed.append(date)
-//                                                    hb.missed.sort()
-//                                                } else { // return to not done
-//                                                    hb.notDone.append(date)
-//                                                    hb.notDone.sort()
-//                                                }
-//                                                hb.allTypesDone.removeAll(where: { $0 == date })
-//                                            } else {
-//                                                hb.done.append(date)
-//                                                hb.done.sort()
-//                                                if hb.notDone.contains(date) { // notDone -> done
-//                                                    hb.notDone.removeAll(where: { $0 == date })
-//                                                    hb.allTypesDone.append(date)
-//                                                    hb.allTypesDone.sort()
-//                                                } else if hb.skipped.contains(date) { // skipped -> done
-//                                                    hb.skipped.removeAll(where: { $0 == date })
-//                                                } else { // in missed
-//                                                    hb.missed.removeAll(where: { $0 == date }) // missed -> done
-//                                                    hb.allTypesDone.append(date)
-//                                                    hb.allTypesDone.sort()
-//                                                }
-//                                            }
-//                                        } label: {
-//                                            Label(
-//                                                title: { Text("Done") },
-//                                                icon: { Image(systemName: "checkmark") })
-//                                        }.tint(.green)
-//                                        
-//                                        Button() { // MARK: Skip
-//                                            if hb.skipped.contains(date) { // if marked as skipped
-//                                                hb.skipped.removeAll(where: { $0 == date })
-//                                                if date < currDate { // return to missed
-//                                                    hb.missed.append(date)
-//                                                    hb.missed.sort()
-//                                                } else { // return to not done
-//                                                    hb.notDone.append(date)
-//                                                    hb.notDone.sort()
-//                                                }
-//                                                hb.allTypesDone.removeAll(where: { $0 == date })
-//                                            } else {
-//                                                hb.skipped.append(date)
-//                                                hb.skipped.sort()
-//                                                if hb.notDone.contains(date) { // notDone -> skipped
-//                                                    hb.notDone.removeAll(where: { $0 == date })
-//                                                    hb.allTypesDone.append(date)
-//                                                    hb.allTypesDone.sort()
-//                                                } else if hb.done.contains(date) { // done -> skipped
-//                                                    hb.done.removeAll(where: { $0 == date })
-//                                                } else { // missed -> skipped
-//                                                    hb.missed.removeAll(where: { $0 == date })
-//                                                    hb.allTypesDone.append(date)
-//                                                    hb.allTypesDone.sort()
-//                                                }
-//                                            }
-//                                        } label: {
-//                                            Label(
-//                                                title: { Text("Skip") },
-//                                                icon: { Image(systemName: "arrow.uturn.left") })
-//                                        }.tint(.blue)
-//                                        
-//                                    }
-//                            }
-//                        } header: {
-//                            Text(cgName).textCase(nil)
-//                        }
-//                    }
-//                }.id(UUID())
-//                    .scrollContentBackground(.hidden)
-//                    .listStyle(GroupedListStyle())
-//                    .font(.custom("FoundersGrotesk-Regular", size: 20))
-//                    .baselineOffset(-5)
-//                    .listSectionSpacing(8)
-                
-            } else {
-                VStack {
-                    Spacer()
-                    Spacer()
-                    Text("No tasks today!").header2().foregroundColor(.blck)
-                    Spacer()
-                    Spacer()
-                    Spacer()
-                }
-            }
-            
-        }.font(.custom("FoundersGrotesk-Regular", size: 20))
-    }
-}
-
 #Preview {
     HomeView()
         .environmentObject(TabModel())
@@ -299,5 +137,3 @@ struct HabitList: View {
         .modelContainer(PreviewSampleData.container)
         .modelContainer(for: [Habit.self, Category.self, Achievements.self], inMemory: true)
 }
-
-

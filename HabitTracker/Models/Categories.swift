@@ -21,3 +21,21 @@ class Category {
         self.orderIndex = orderIndex
     }
 }
+
+struct CategoryHeader: View {
+    var title: String
+    var cond: Bool
+    init(_ title: String, cond: Bool) {
+        self.title = title
+        self.cond = cond
+    }
+    var body: some View {
+        if cond {
+            Text(title)
+                .cust(20, true)
+                .leading()
+                .foregroundColor(.blck.opacity(0.9))
+                .padding([.top, .horizontal])
+        }
+    }
+}

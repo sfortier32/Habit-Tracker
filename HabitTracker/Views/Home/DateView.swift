@@ -41,45 +41,51 @@ struct DateView: View {
         if cur != selected {
             if count == 0 {
                 VStack(alignment: .center) {
-                    Text(weekday).header5()
-                        .foregroundColor(.gray)
-                        .textCase(.uppercase)
-                    Spacer()
-                        .frame(height: 12)
-                    Text(day)
-                        .foregroundColor(.blck).header5()
+                    VStack {
+                        Text(weekday).header5()
+                            .foregroundColor(.gray)
+                            .textCase(.uppercase)
+                        Spacer()
+                            .frame(height: 12)
+                        Text(day)
+                            .foregroundColor(.blck).header5()
+                    }.padding(.bottom, -5)
                 }.frame(width: 50, height: 90)
                     .cornerRadius(40)
             } else { // habits occur
                 VStack(alignment: .center) {
-                    Text(weekday).header5()
-                        .foregroundColor(.gray)
-                        .textCase(.uppercase)
-                        .padding(.top, 2)
-                        .padding(.bottom, -7)
-                    RoundedRectangle(cornerRadius: 35)
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(.grayshadow)
-                        .overlay {
-                            Text(day)
-                                .foregroundColor(.blck).header5()
-                                .baselineOffset(-5)
-                        }
+                    VStack {
+                        Text(weekday).header5()
+                            .foregroundColor(.gray)
+                            .textCase(.uppercase)
+                            .padding(.top, 2)
+                            .padding(.bottom, -7)
+                        RoundedRectangle(cornerRadius: 35)
+                            .frame(width: 40, height: 40)
+                            .foregroundColor(.grayshadow)
+                            .overlay {
+                                Text(day)
+                                    .foregroundColor(.blck).header5()
+                                    .baselineOffset(-5)
+                            }
+                    }.padding(.bottom, -5)
                 }.frame(width: 50, height: 85)
                     .cornerRadius(40)
                     .padding(.top, 5)
             }
         } else {
             VStack(alignment: .center) {
-                Text(weekday).header5()
-                    .foregroundColor(.cream)
-                    .textCase(.uppercase)
-                    .padding(.top, -1)
-                    .padding(.bottom, 2)
-                Spacer()
-                    .frame(height: 10)
-                Text(day)
-                    .foregroundColor(.cream).header5()
+                VStack {
+                    Text(weekday).header5()
+                        .foregroundColor(.cream)
+                        .textCase(.uppercase)
+                        .padding(.top, -1)
+                        .padding(.bottom, 2)
+                    Spacer()
+                        .frame(height: 10)
+                    Text(day)
+                        .foregroundColor(.cream).header5()
+                }.padding(.bottom, -5)
             }.frame(width: 50, height: 90)
                 .background(Color.blck)
                 .cornerRadius(40)

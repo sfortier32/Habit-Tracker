@@ -12,9 +12,10 @@ struct SettingsView: View {
     @EnvironmentObject var tm: TabModel
     @Environment (\.modelContext) var mc
     
-    @State private var changeName: Bool = false
-    @State private var resetDataAlert: Bool = false
+    @State private var changeName = false
+    @State private var resetDataAlert = false
     @State private var resetAchievementsAlert = false
+    @State private var deleteCategoriesAlert = false
     
     var body: some View {
         NavigationStack {
@@ -66,8 +67,9 @@ struct SettingsView: View {
 //                                .padding(.horizontal, 15).padding(.vertical, 5)
 //                        ).padding(.all, 12).listRowSeparator(.hidden)
                         
-                        Button("Reset Categories") {
+                        Button("Delete All Categories") {
                             // TODO: Separate into function with alert
+                            deleteCategoriesAlert.toggle()
                             try? mc.delete(model: Category.self)
                         }.listRowBackground(
                             RoundedRectangle(cornerRadius: 15)
@@ -88,21 +90,45 @@ struct SettingsView: View {
                     TabsView()
                         .environmentObject(tm)
                     
-                    
+                // MARK: Reset Achievements
                 }.alert("Reset Achievements", isPresented: $resetAchievementsAlert, actions: {
                     Button("Yes", role: .destructive, action: {
                         try? mc.delete(model: Achievements.self)
                         mc.insert(Achievements())
                     })
-                    Button("Cancel", role: .cancel, action: { print(resetAchievementsAlert) })
+                    Button("Cancel", role: .cancel, action: {})
                 }, message: {
                     Text("Are you sure you want to reset all achievement progress?")
                 })
+                
+                // MARK: Delete Data
                 .alert("Reset All Data", isPresented: $resetDataAlert, actions: {
-                    Button("Yes", role: .destructive, action: { resetData() })
+                    Button("Yes", role: .destructive, action: {
+                        try? mc.delete(model: Habit.self)
+                        try? mc.delete(model: Achievements.self)
+                        try? mc.delete(model: Category.self)
+                        
+                        let defaults = UserDefaults.standard
+                        let dictionary = defaults.dictionaryRepresentation()
+                        dictionary.keys.forEach { key in
+                            defaults.removeObject(forKey: key)
+                        }
+                        
+                        exit(0)
+                    })
                     Button("Cancel", role: .cancel, action: {})
                 }, message: {
                     Text("Reseting your data will delete all habits, achievements, and force the app to close. Are you sure you want to continue?")
+                })
+                
+                // MARK: Delete Categories
+                .alert("Delete All Categories", isPresented: $deleteCategoriesAlert, actions: {
+                    Button("Yes", role: .destructive, action: {
+                        try? mc.delete(model: Category.self)
+                    })
+                    Button("Cancel", role: .cancel, action: {})
+                }, message: {
+                    Text("Are you sure you want to delete all categories? This will not delete any habits with categories.")
                 })
                 
             }.sheet(isPresented: $changeName) {
@@ -111,17 +137,6 @@ struct SettingsView: View {
                     .presentationDetents([.small])
             }
         }
-    }
-    func resetData() {
-        try? mc.delete(model: Habit.self)
-        try? mc.delete(model: Achievements.self)
-        // TODO: Delete all categories/reset to one "uncategorized"
-        let defaults = UserDefaults.standard
-        let dictionary = defaults.dictionaryRepresentation()
-        dictionary.keys.forEach { key in
-            defaults.removeObject(forKey: key)
-        }
-        exit(0)
     }
 }
 

@@ -18,11 +18,13 @@
 		E425F9A42AA569AD00824597 /* FoundersGrotesk-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E45A98A72AA565E20083C7D6 /* FoundersGrotesk-Semibold.otf */; };
 		E425F9AB2AA6336300824597 /* ChangeName.swift in Sources */ = {isa = PBXBuildFile; fileRef = E425F9AA2AA6336300824597 /* ChangeName.swift */; };
 		E425F9C22AA6378900824597 /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E425F9B72AA6346200824597 /* Habit.swift */; };
-		E426B1192AC203B700A86A2E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E426B1182AC203B700A86A2E /* Extensions.swift */; };
+		E426B1192AC203B700A86A2E /* ExtList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E426B1182AC203B700A86A2E /* ExtList.swift */; };
 		E426B11B2AC2094500A86A2E /* Categories.swift in Sources */ = {isa = PBXBuildFile; fileRef = E426B11A2AC2094500A86A2E /* Categories.swift */; };
 		E426B11D2AC21E4B00A86A2E /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E426B11C2AC21E4B00A86A2E /* TimerView.swift */; };
 		E426B11F2AC23CC000A86A2E /* About.swift in Sources */ = {isa = PBXBuildFile; fileRef = E426B11E2AC23CC000A86A2E /* About.swift */; };
 		E437F6C72AA796FC00CDCD08 /* DateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E437F6C62AA796FC00CDCD08 /* DateModel.swift */; };
+		E44ABC142ACE072E0085FF25 /* ExtStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44ABC132ACE072E0085FF25 /* ExtStyle.swift */; };
+		E44ABC162ACE07860085FF25 /* ExtOther.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44ABC152ACE07860085FF25 /* ExtOther.swift */; };
 		E45A98C82AA5670D0083C7D6 /* HabitTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45A98C72AA5670D0083C7D6 /* HabitTrackerApp.swift */; };
 		E45A98CA2AA5670D0083C7D6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45A98C92AA5670D0083C7D6 /* ViewController.swift */; };
 		E45A98CC2AA5670F0083C7D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E45A98CB2AA5670F0083C7D6 /* Assets.xcassets */; };
@@ -51,11 +53,13 @@
 		E416120C2AA6C029004397E6 /* HabitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitView.swift; sourceTree = "<group>"; };
 		E425F9AA2AA6336300824597 /* ChangeName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeName.swift; sourceTree = "<group>"; };
 		E425F9B72AA6346200824597 /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
-		E426B1182AC203B700A86A2E /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		E426B1182AC203B700A86A2E /* ExtList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtList.swift; sourceTree = "<group>"; };
 		E426B11A2AC2094500A86A2E /* Categories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Categories.swift; sourceTree = "<group>"; };
 		E426B11C2AC21E4B00A86A2E /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		E426B11E2AC23CC000A86A2E /* About.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = About.swift; sourceTree = "<group>"; };
 		E437F6C62AA796FC00CDCD08 /* DateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateModel.swift; sourceTree = "<group>"; };
+		E44ABC132ACE072E0085FF25 /* ExtStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtStyle.swift; sourceTree = "<group>"; };
+		E44ABC152ACE07860085FF25 /* ExtOther.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtOther.swift; sourceTree = "<group>"; };
 		E45A98A42AA565E20083C7D6 /* FoundersGrotesk-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FoundersGrotesk-Light.otf"; sourceTree = "<group>"; };
 		E45A98A52AA565E20083C7D6 /* FoundersGrotesk-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FoundersGrotesk-Medium.otf"; sourceTree = "<group>"; };
 		E45A98A62AA565E20083C7D6 /* FoundersGrotesk-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FoundersGrotesk-Bold.otf"; sourceTree = "<group>"; };
@@ -128,12 +132,23 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		E44ABC172ACE079D0085FF25 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E426B1182AC203B700A86A2E /* ExtList.swift */,
+				E44ABC132ACE072E0085FF25 /* ExtStyle.swift */,
+				E44ABC152ACE07860085FF25 /* ExtOther.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		E45A98C62AA5670D0083C7D6 /* HabitTracker */ = {
 			isa = PBXGroup;
 			children = (
 				E45A98C72AA5670D0083C7D6 /* HabitTrackerApp.swift */,
 				E45A98C92AA5670D0083C7D6 /* ViewController.swift */,
 				E45A98DB2AA567B30083C7D6 /* Models */,
+				E44ABC172ACE079D0085FF25 /* Extensions */,
 				E45A98DA2AA5672C0083C7D6 /* Views */,
 				E45A98E42AA568BE0083C7D6 /* Info.plist */,
 				E45A98CB2AA5670F0083C7D6 /* Assets.xcassets */,
@@ -167,13 +182,12 @@
 		E45A98DB2AA567B30083C7D6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				E426B11A2AC2094500A86A2E /* Categories.swift */,
-				E476E7E52AC45B99006D0993 /* Achievements.swift */,
 				E425F9B72AA6346200824597 /* Habit.swift */,
+				E426B11A2AC2094500A86A2E /* Categories.swift */,
 				E476E7E32AC45A98006D0993 /* Timer.swift */,
+				E476E7E52AC45B99006D0993 /* Achievements.swift */,
 				E437F6C62AA796FC00CDCD08 /* DateModel.swift */,
 				E45A98DC2AA567BF0083C7D6 /* TabModel.swift */,
-				E426B1182AC203B700A86A2E /* Extensions.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -307,6 +321,7 @@
 			files = (
 				E4FB2C2F2AA7E56F00A428F1 /* PreviewSampleData.swift in Sources */,
 				E45A98E32AA5685B0083C7D6 /* TermsView.swift in Sources */,
+				E44ABC162ACE07860085FF25 /* ExtOther.swift in Sources */,
 				E4BE723E2ACC607300BF2E8B /* DateView.swift in Sources */,
 				E416120D2AA6C029004397E6 /* HabitView.swift in Sources */,
 				E4041FD82AB3CD9400789B87 /* SymbolPicker.swift in Sources */,
@@ -322,12 +337,13 @@
 				E426B11F2AC23CC000A86A2E /* About.swift in Sources */,
 				E426B11D2AC21E4B00A86A2E /* TimerView.swift in Sources */,
 				E425F9C22AA6378900824597 /* Habit.swift in Sources */,
+				E44ABC142ACE072E0085FF25 /* ExtStyle.swift in Sources */,
 				E45A98DD2AA567BF0083C7D6 /* TabModel.swift in Sources */,
 				E426B11B2AC2094500A86A2E /* Categories.swift in Sources */,
 				E45A98D92AA567290083C7D6 /* HomeView.swift in Sources */,
 				E476E7E62AC45B99006D0993 /* Achievements.swift in Sources */,
 				E476E7EC2AC63080006D0993 /* Confetti.swift in Sources */,
-				E426B1192AC203B700A86A2E /* Extensions.swift in Sources */,
+				E426B1192AC203B700A86A2E /* ExtList.swift in Sources */,
 				E4C13A512ACB22BF0054FFF4 /* AchievementsView.swift in Sources */,
 				E425F9AB2AA6336300824597 /* ChangeName.swift in Sources */,
 				E45A98C82AA5670D0083C7D6 /* HabitTrackerApp.swift in Sources */,
