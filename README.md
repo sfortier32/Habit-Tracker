@@ -23,15 +23,13 @@ The settings page currently allows users to delete batches of data i.e. the app'
 
 ## Tasks
 #### To-Do
-- If timer never started remove on disappear
 - Reward system inside achievements view
     - Get currency for every completion and use them to skip days
     - Get currency for unlocking badges
     - Minutes achievements
-    - Redo design
+- Redo design for badges to better match app aesthetic
 - Allow reminders
     - Make a ‘life or death’ mode that forces permanent miss if not done in specific time period after reminder
-- Add attributions to settings page
 
 #### Done
 - Add New Habits View
@@ -53,6 +51,7 @@ The settings page currently allows users to delete batches of data i.e. the app'
         - Dictionary in each habit with the day being the key and time being the value
         - Confetti when complete
         - Disable stopwatch once activity is complete and add edited date to done from current pile
+        - Remove date from dictionary if completed or never started
 - Stats View
     - Design badges for streaks and tasks
     - Make badges unlockable
@@ -69,3 +68,5 @@ The settings page currently allows users to delete batches of data i.e. the app'
     - About page
     - Reset data buttons
     - Split achievements into new tab
+    - Add attributions to about
+    - Finished instructions in about page
