@@ -12,8 +12,8 @@ import SwiftData
 struct Habit_TrackerApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Category.self,
             Habit.self,
+            Category.self,
             Achievements.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
@@ -33,6 +33,7 @@ struct Habit_TrackerApp: App {
         return fm.string(from: Date.now.removeTimeStamp)
     }()
     @AppStorage("bigStreaks") var bigStreaks: Bool = true
+    @AppStorage("bigStreaks") var bigWeekly: Bool = true
     
     var body: some Scene {
         WindowGroup {

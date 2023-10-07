@@ -7,9 +7,17 @@
 
 import SwiftUI
 
+enum Completion: Identifiable {
+    var id: Self {
+        return self
+    }
+    case done, notDone, skipped, missed
+}
+
 struct HabitRow: View {
     let hb: Habit
     let date: Date
+    let arr: Completion
     
     @State private var currDate = Date.now.removeTimeStamp
     @EnvironmentObject var hInt: HabitInteractions
@@ -34,32 +42,35 @@ struct HabitRow: View {
                     
                     // MARK: Title
                     VStack(alignment: .leading) {
-                        if hb.notDone.contains(self.date) {
+                        switch arr {
+                        case .notDone:
                             Text("\(hb.title)")
                             
                             // MARK: New/Not Done
-                            if self.date == hb.dateAdded || self.date == hb.firstOccurence {
+                            if date == hb.dateAdded || date == hb.firstOccurence {
                                 HStack {
                                     Image(systemName: "burst.fill")
                                         .resize(h: 12)
                                     Text("New").text4()
                                         .baselineOffset(-5)
                                 }.foregroundColor(.pink)
-                                    .padding(.top, -12)
+                                    .padding(.top, -6)
                             } else {
                                 Text("Not Done").text4()
                                     .foregroundColor(.darkgray)
+                                    .padding(.top, -6)
                             }
                             
                             // MARK: Missed
-                        } else if hb.missed.contains(self.date) {
+                        case .missed:
                             Text("\(hb.title)")
                             Text("Missed").text4()
                                 .foregroundColor(.red)
+                                .padding(.top, -6)
                             
                             
                             // MARK: Skipped
-                        } else if hb.skipped.contains(self.date) {
+                        case .skipped:
                             Text("\(hb.title)")
                                 .strikethrough()
                             HStack {
@@ -68,11 +79,11 @@ struct HabitRow: View {
                                 Text("Skipped").text4()
                                     .baselineOffset(-6)
                             }.foregroundColor(.blue)
-                                .padding(.top, -12)
+                                .padding(.top, -6)
                             
                             
                             // MARK: Done
-                        } else if hb.done.contains(self.date) {
+                        case .done:
                             Text("\(hb.title)")
                                 .strikethrough()
                             HStack {
@@ -81,7 +92,7 @@ struct HabitRow: View {
                                 Text("Done").text4()
                                     .baselineOffset(-6)
                             }.foregroundColor(.green)
-                                .padding(.top, -12)
+                                .padding(.top, -6)
                         }
                     }
                     Spacer()
@@ -92,7 +103,8 @@ struct HabitRow: View {
             
             // MARK: Units
             Button {
-                if hb.freqType == "times" && currDate == date {
+                if hb.freqType == "minutes" {
+                    hInt.habit = hb
                     hInt.openTimer.toggle()
                 }
             } label: {
@@ -113,8 +125,10 @@ struct HabitRow: View {
                     Spacer()
                 }.frame(width: 70, height: 50)
             }.clipped().buttonStyle(BorderlessButtonStyle())
+                .disabled(arr != .notDone)
+                .foregroundColor(.blck)
             
         }.frame(height: 70)
-            .opacity(hb.notDone.contains(self.date) ? 1 : 0.6)
+            .opacity(hb.notDone.contains(date) ? 1 : 0.6)
     }
 }

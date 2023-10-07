@@ -103,8 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				E45A98DE2AA5681A0083C7D6 /* TabsView.swift */,
-				E4C13A502ACB22BF0054FFF4 /* AchievementsView.swift */,
-				E426B11C2AC21E4B00A86A2E /* TimerView.swift */,
+				E45A98DC2AA567BF0083C7D6 /* TabModel.swift */,
 				E45A98E22AA5685B0083C7D6 /* TermsView.swift */,
 			);
 			path = Helpers;
@@ -118,6 +117,15 @@
 				E476E7EB2AC63080006D0993 /* Confetti.swift */,
 			);
 			path = Stats;
+			sourceTree = "<group>";
+		};
+		E426627F2AD0B7410040C6E5 /* Achievements */ = {
+			isa = PBXGroup;
+			children = (
+				E4C13A502ACB22BF0054FFF4 /* AchievementsView.swift */,
+				E476E7E52AC45B99006D0993 /* Achievements.swift */,
+			);
+			path = Achievements;
 			sourceTree = "<group>";
 		};
 		E43025DA2AA1298A00C6410B /* Fonts */ = {
@@ -147,7 +155,6 @@
 			children = (
 				E45A98C72AA5670D0083C7D6 /* HabitTrackerApp.swift */,
 				E45A98C92AA5670D0083C7D6 /* ViewController.swift */,
-				E45A98DB2AA567B30083C7D6 /* Models */,
 				E44ABC172ACE079D0085FF25 /* Extensions */,
 				E45A98DA2AA5672C0083C7D6 /* Views */,
 				E45A98E42AA568BE0083C7D6 /* Info.plist */,
@@ -174,22 +181,10 @@
 				E4BE723C2ACC5C7E00BF2E8B /* Habits */,
 				E425F9AC2AA633B700824597 /* Stats */,
 				E476E7F02AC63407006D0993 /* Settings */,
+				E426627F2AD0B7410040C6E5 /* Achievements */,
 				E425F9A92AA6335400824597 /* Helpers */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		E45A98DB2AA567B30083C7D6 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				E425F9B72AA6346200824597 /* Habit.swift */,
-				E426B11A2AC2094500A86A2E /* Categories.swift */,
-				E476E7E32AC45A98006D0993 /* Timer.swift */,
-				E476E7E52AC45B99006D0993 /* Achievements.swift */,
-				E437F6C62AA796FC00CDCD08 /* DateModel.swift */,
-				E45A98DC2AA567BF0083C7D6 /* TabModel.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		E476E7F02AC63407006D0993 /* Settings */ = {
@@ -206,9 +201,11 @@
 			isa = PBXGroup;
 			children = (
 				E45A98D82AA567290083C7D6 /* HomeView.swift */,
-				E4041FCC2AB2351300789B87 /* HabitList.swift */,
-				E4041FCA2AB234F700789B87 /* HabitRow.swift */,
+				E426B11C2AC21E4B00A86A2E /* TimerView.swift */,
+				E476E7E32AC45A98006D0993 /* Timer.swift */,
+				E416120C2AA6C029004397E6 /* HabitView.swift */,
 				E4BE723D2ACC607300BF2E8B /* DateView.swift */,
+				E437F6C62AA796FC00CDCD08 /* DateModel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -233,8 +230,11 @@
 		E4BE723C2ACC5C7E00BF2E8B /* Habits */ = {
 			isa = PBXGroup;
 			children = (
-				E416120C2AA6C029004397E6 /* HabitView.swift */,
+				E4041FCC2AB2351300789B87 /* HabitList.swift */,
+				E4041FCA2AB234F700789B87 /* HabitRow.swift */,
+				E425F9B72AA6346200824597 /* Habit.swift */,
 				E4BE723A2ACB847600BF2E8B /* CategoryView.swift */,
+				E426B11A2AC2094500A86A2E /* Categories.swift */,
 				E4041FD72AB3CD9400789B87 /* SymbolPicker.swift */,
 			);
 			path = Habits;

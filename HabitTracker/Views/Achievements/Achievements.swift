@@ -30,6 +30,13 @@ class Achievements {
         "tasks_ach6_500":false,
         "tasks_ach7_1000":false
     ]
+    var minutes: [String:Bool] = [
+        "minutes_ach1_30":false,
+        "minutes_ach2_60":false,
+        "minutes_ach3_300":false,
+        "minutes_ach4_720":false,
+        "minutes_ach5_1440":false,
+    ]
     
     
     var streakNames: [String:String] = [
@@ -52,7 +59,16 @@ class Achievements {
         "tasks_ach7_1000": "1000 tasks"
     ]
     
+    var minuteNames: [String:String] = [
+        "minutes_ach1_30": "30 minutes",
+        "minutes_ach2_60": "1 hour",
+        "minutes_ach3_300": "5 hours",
+        "minutes_ach4_720": "12 hours",
+        "minutes_ach5_1440": "24 hours",
+    ]
+    
     var tasksCompleted: Int = 0
+    var minutesCompleted: Int = 0
     
     init() {
     }

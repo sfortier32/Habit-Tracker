@@ -95,7 +95,7 @@ struct DateView: View {
         if self.habits == [] { return 0 }
         var res: [Habit] = []
         for hb in self.habits {
-            if hb.weekDays.contains(weekday) {
+            if hb.weekdays.contains(weekday) {
                 res.append(hb)
             }
         }

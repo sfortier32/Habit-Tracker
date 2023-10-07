@@ -15,9 +15,9 @@ class TimerModel {
     var secElapsed: Int = 0
     var secRemaining: Int
     
-    init(habit: Habit, date: Date, secRemaining: Int) {
+    init(habit: Habit, date: Date) {
         self.habit = habit
         self.date = date
-        self.secRemaining = secRemaining
+        self.secRemaining = Int(habit.frequency * 60)
     }
 }

@@ -10,6 +10,37 @@ import SwiftUI
 
 // MARK: Text
 extension View {
+    
+    // MARK: Positions
+    func center() -> some View {
+        return self.frame(maxWidth: .infinity, alignment: .center)
+    }
+    func leading() -> some View {
+        return self.frame(maxWidth: .infinity, alignment: .leading)
+    }
+    func trailing() -> some View {
+        return self.frame(maxWidth: .infinity, alignment: .trailing)
+    }
+    
+    
+    // MARK: Spacing
+    func VSpacer(_ h: Int) -> some View {
+        return Spacer().frame(height: CGFloat(h))
+    }
+    func HSpacer(_ w: Int) -> some View {
+        return Spacer().frame(width: CGFloat(w))
+    }
+    func Separator() -> some View {
+        return {
+            VStack {
+                VSpacer(24)
+                Divider()
+                VSpacer(24)
+            }
+        }()
+    }
+    
+    // MARK: Text
     func header1() -> some View { return self.font(.custom("FoundersGrotesk-Medium", size: 38)) }
     func header2() -> some View { return self.font(.custom("FoundersGrotesk-Medium", size: 28)) }
     func header3() -> some View { return self.font(.custom("FoundersGrotesk-Medium", size: 26)) }

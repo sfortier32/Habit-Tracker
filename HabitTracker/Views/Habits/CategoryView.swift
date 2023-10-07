@@ -111,7 +111,7 @@ struct CategoryList: View {
 
 // MARK: AddCategory
 struct AddCategory: View {
-    @State var title = ""
+    @State var title: String = ""
     @Binding var bool: Bool
     
     @Environment(\.modelContext) var mc

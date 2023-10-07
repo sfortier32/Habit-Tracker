@@ -14,6 +14,12 @@ extension View {
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
             Button() { // MARK: Done
                 if hb.done.contains(date) { // if marked as done
+                    if hb.timers[date] != nil {
+                        hb.timers[date] = nil
+                    }
+                    if hb.freqType == "minutes" {
+                        hb.minutes -= Int(hb.frequency)
+                    }
                     hb.done.removeAll(where: { $0 == date })
                     if date < Date.now.removeTimeStamp { // return to missed
                         hb.missed.append(date)
@@ -30,12 +36,18 @@ extension View {
                         hb.notDone.removeAll(where: { $0 == date })
                         hb.allTypesDone.append(date)
                         hb.allTypesDone.sort()
+                        if hb.freqType == "minutes" {
+                            hb.minutes += Int(hb.frequency)
+                        }
                     } else if hb.skipped.contains(date) { // skipped -> done
                         hb.skipped.removeAll(where: { $0 == date })
                     } else { // in missed
                         hb.missed.removeAll(where: { $0 == date }) // missed -> done
                         hb.allTypesDone.append(date)
                         hb.allTypesDone.sort()
+                        if hb.freqType == "minutes" {
+                            hb.minutes += Int(hb.frequency)
+                        }
                     }
                 }
             } label: {
@@ -47,6 +59,12 @@ extension View {
             
             Button() { // MARK: Skip
                 if hb.skipped.contains(date) { // if marked as skipped
+                    if hb.timers[date] != nil {
+                        hb.timers[date] = nil
+                    }
+                    if hb.freqType == "minutes" {
+                        hb.minutes -= Int(hb.frequency)
+                    }
                     hb.skipped.removeAll(where: { $0 == date })
                     if date < Date.now.removeTimeStamp { // return to missed
                         hb.missed.append(date)
@@ -65,6 +83,9 @@ extension View {
                         hb.allTypesDone.sort()
                     } else if hb.done.contains(date) { // done -> skipped
                         hb.done.removeAll(where: { $0 == date })
+                        if hb.freqType == "minutes" {
+                            hb.minutes -= Int(hb.frequency)
+                        }
                     } else { // missed -> skipped
                         hb.missed.removeAll(where: { $0 == date })
                         hb.allTypesDone.append(date)
@@ -82,13 +103,16 @@ extension View {
     // MARK: List Style
     var customListButton: some View {
         return self.listRowBackground(
-            RoundedRectangle(cornerRadius: 15)
-                .fill(Color("c-background"))
-                .padding(.horizontal, 15).padding(.vertical, 5)
-            )
-            .padding(.all, 12)
-            .listRowSeparator(.hidden)
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.background)
+                .padding(.horizontal, 15)
+                .padding(.vertical, 5)
+        )
+        .padding(.all, 12)
+        .listRowSeparator(.hidden)
     }
+    
+    
     var customListStyle: some View {
         return self.scrollContentBackground(.hidden)
         .listStyle(PlainListStyle())
@@ -107,32 +131,6 @@ extension View {
 }
 
 extension View {
-    // MARK: Positions
-    func center() -> some View {
-        return self.frame(maxWidth: .infinity, alignment: .center)
-    }
-    func leading() -> some View {
-        return self.frame(maxWidth: .infinity, alignment: .leading)
-    }
-    func trailing() -> some View {
-        return self.frame(maxWidth: .infinity, alignment: .trailing)
-    }
-    
-    
-    // MARK: Spacing
-    func VSpacer(_ h: Int) -> some View {
-        return Spacer().frame(height: CGFloat(h))
-    }
-    func Separator() -> some View {
-        return {
-            VStack {
-                VSpacer(24)
-                Divider()
-                VSpacer(24)
-            }
-        }()
-    }
-    
     // MARK: Masks
     func VMask() -> some View {
         self.mask(

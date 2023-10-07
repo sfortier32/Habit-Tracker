@@ -18,18 +18,18 @@ struct HabitView: View {
     
     // MARK: Habit Features
     @State private var title: String = ""
-    @State private var icon: String
-    @State private var freq: Double
-    @State private var freqType: String
+    @State private var icon: String = "pills"
+    @State private var freq: Double = 1
+    @State private var freqType: String = "times"
     @State private var days: [String] = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
-    @State private var selectedDays: [String]
+    @State private var selectedDays: [String] = []
     
     let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = 2
-        formatter.minimum = .init(floatLiteral: 1)
+        formatter.minimum = .init(floatLiteral: 0.01)
         formatter.maximum = .init(floatLiteral: 9999.99)
         return formatter
     }()
@@ -44,13 +44,9 @@ struct HabitView: View {
             self.icon = habit!.imageName
             self.freq = habit!.frequency
             self.freqType = habit!.freqType
-            self.selectedDays = habit!.weekDays
+            self.selectedDays = habit!.weekdays
             self.cInt = CategoryInteractions(selected: habit!.category)
         } else {
-            self.icon = "pills"
-            self.freq = 1
-            self.freqType = "times"
-            self.selectedDays = []
             self.cInt = CategoryInteractions(selected: nil)
         }
     }
@@ -170,11 +166,12 @@ struct HabitView: View {
                     Button("Submit") {
                         if editor {
                             editingHabit!.title = title
-                            editingHabit!.weekDays = selectedDays
+                            editingHabit!.weekdays = selectedDays
                             editingHabit!.freqType = freqType.lowercased()
                             editingHabit!.frequency = freq
                             editingHabit!.imageName = icon
                             editingHabit!.category = cInt.selected
+                            editingHabit!.timers = [:]
                             do {
                                 try mc.save()
                             } catch {
@@ -183,7 +180,7 @@ struct HabitView: View {
                         } else {
                             let newHabit = Habit(
                                 title: title,
-                                weekDays: selectedDays,
+                                weekdays: selectedDays,
                                 freqType: freqType.lowercased(),
                                 frequency: freq,
                                 imageName: icon)
@@ -192,7 +189,7 @@ struct HabitView: View {
                             hInt.objectWillChange.send()
                         }
                         pageOpen.wrappedValue.toggle()
-                    }.disabled(title.isEmpty || selectedDays.isEmpty)
+                    }.disabled(title.isEmpty || selectedDays.isEmpty || freqType.isEmpty)
                         .font(.custom("FoundersGrotesk-Regular", size: 22))
                     VSpacer(18)
                     

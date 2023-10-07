@@ -29,10 +29,10 @@ struct ViewController: View {
             SettingsView()
                 .environmentObject(tm)
                 .modelContext(self.mc)
-//        case .achievements:
-//            AchievementsView()
-//                .environmentObject(tm)
-//                .modelContext(self.mc)
+        case .achievements:
+            AchievementsView()
+                .environmentObject(tm)
+                .modelContext(self.mc)
         }
     }
 }

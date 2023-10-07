@@ -32,14 +32,7 @@ struct SettingsView: View {
                         // MARK: About
                         NavigationLink("About") {
                             About()
-                        }.listRowBackground(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(Color("c-background"))
-                                .padding(.horizontal, 15)
-                                .padding(.vertical, 5)
-                        )
-                        .padding(.all, 12)
-                        .listRowSeparator(.hidden)
+                        }.customListButton
                         
                         // MARK: Change Name
                         Button("Change Name") {
@@ -51,21 +44,13 @@ struct SettingsView: View {
                         ).padding(.all, 12).listRowSeparator(.hidden)
                         
                         // MARK: Reset Data
-                        Button("Reset All Data") {
-                            resetDataAlert.toggle()
+                        Button("Reset Achievements") {
+                            resetAchievementsAlert.toggle()
                         }.listRowBackground(
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(Color("c-background"))
                                 .padding(.horizontal, 15).padding(.vertical, 5)
                         ).padding(.all, 12).listRowSeparator(.hidden)
-                        
-//                        Button("Reset Achievements") {
-//                            resetAchievementsAlert.toggle()
-//                        }.listRowBackground(
-//                            RoundedRectangle(cornerRadius: 15)
-//                                .fill(Color("c-background"))
-//                                .padding(.horizontal, 15).padding(.vertical, 5)
-//                        ).padding(.all, 12).listRowSeparator(.hidden)
                         
                         Button("Delete All Categories") {
                             // TODO: Separate into function with alert
@@ -77,11 +62,15 @@ struct SettingsView: View {
                                 .padding(.horizontal, 15).padding(.vertical, 5)
                         ).padding(.all, 12).listRowSeparator(.hidden)
                         
-                    }
-                    .scrollContentBackground(.hidden)
-                    .listStyle(PlainListStyle())
-                    .font(.custom("FoundersGrotesk-Regular", size: 20))
-                    .baselineOffset(-5)
+                        Button("Reset All Data") {
+                            resetDataAlert.toggle()
+                        }.listRowBackground(
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(Color("c-background"))
+                                .padding(.horizontal, 15).padding(.vertical, 5)
+                        ).padding(.all, 12).listRowSeparator(.hidden)
+                        
+                    }.customListStyle
                     
                     Spacer()
                     Text("© Sophia Fortier, 2023").text3()
@@ -118,7 +107,7 @@ struct SettingsView: View {
                     })
                     Button("Cancel", role: .cancel, action: {})
                 }, message: {
-                    Text("Reseting your data will delete all habits, achievements, and force the app to close. Are you sure you want to continue?")
+                    Text("Reseting your data will delete all habits, categories, achievement progress, and force the app to close. Are you sure you want to continue?")
                 })
                 
                 // MARK: Delete Categories
@@ -128,7 +117,7 @@ struct SettingsView: View {
                     })
                     Button("Cancel", role: .cancel, action: {})
                 }, message: {
-                    Text("Are you sure you want to delete all categories? This will not delete any habits with categories.")
+                    Text("Are you sure you want to delete all categories? This will not delete the habits within these categories.")
                 })
                 
             }.sheet(isPresented: $changeName) {

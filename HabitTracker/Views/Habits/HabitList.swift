@@ -63,11 +63,43 @@ struct HabitList: View {
     var Page: some View {
         VStack {
             List {
-                let habitsWOFiltered = habitsWOCateg.filter({ $0.dateAdded <= date && $0.weekDays.contains(weekday) })
+                ForEach(categs) { cg in
+                    let chFiltered = cg.habits.filter({
+                        $0.dateAdded <= date && $0.weekdays.contains(weekday)
+                    })
+                    if !chFiltered.isEmpty {
+                        Text("\(cg.title)").customListHeader
+                            .padding(.top, 7)
+                        ForEach(chFiltered) { hb in
+                            HabitRow(hb: hb, date: self.date, arr:
+                                        hb.done.contains(date) ? Completion.done :
+                                        hb.notDone.contains(date) ? Completion.notDone :
+                                        hb.missed.contains(date) ? Completion.missed :
+                                        Completion.skipped)
+                            .customListButton
+                            .swipeThreeActions(hb: hb, date: date)
+                            .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                                Button(role: .destructive) {
+                                    habitToDelete = hb
+                                    deleteHabit.toggle()
+                                } label: {
+                                    Image(systemName: "trash")
+                                }
+                            }
+                        } // end foreach habits
+                    } // end foreach categs
+                } // end isEmpty
+                
+                let habitsWOFiltered = habitsWOCateg.filter({ $0.dateAdded <= date && $0.weekdays.contains(weekday) })
                 if !habitsWOFiltered.isEmpty {
                     Text("Uncategorized").customListHeader
                     ForEach(habitsWOFiltered) { hb in
-                        HabitRow(hb: hb, date: self.date)
+                        HabitRow(hb: hb, date: self.date, arr:
+                                    hb.done.contains(date) ? Completion.done :
+                                    hb.notDone.contains(date) ? Completion.notDone :
+                                    hb.missed.contains(date) ? Completion.missed :
+                                    Completion.skipped
+                        )
                             .customListButton
                             .swipeThreeActions(hb: hb, date: date)
                             .swipeActions(edge: .leading, allowsFullSwipe: true) {
@@ -80,30 +112,9 @@ struct HabitList: View {
                             }
                     } // end foreach
                 } // end ifEmpty
-                
-                ForEach(categs) { cg in
-                    let chFiltered = cg.habits.filter({
-                        $0.dateAdded <= date && $0.weekDays.contains(weekday)
-                    })
-                    if !chFiltered.isEmpty {
-                        Text("\(cg.title)").customListHeader
-                            .padding(.top, 7)
-                        ForEach(chFiltered) { hb in
-                            HabitRow(hb: hb, date: self.date)
-                                .customListButton
-                                .swipeThreeActions(hb: hb, date: date)
-                                .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                                    Button(role: .destructive) {
-                                        habitToDelete = hb
-                                        deleteHabit.toggle()
-                                    } label: {
-                                        Image(systemName: "trash")
-                                    }
-                                }
-                        } // end foreach habits
-                    } // end foreach categs
-                } // end isEmpty
-            }.customListStyle // end list
+            }
+            .customListStyle // end list
+            .VMask()
             
             .confirmationDialog("Are you sure you want to delete " + (habitToDelete == nil ? "this habit?" : "\"\(habitToDelete!.title)\"?"), isPresented: $deleteHabit, titleVisibility: .visible) {
                 Button("Yes", role: .destructive) {

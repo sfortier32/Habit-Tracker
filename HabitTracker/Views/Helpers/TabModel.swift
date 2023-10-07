@@ -14,7 +14,7 @@ class TabModel: ObservableObject {
     enum Tab: String, CaseIterable {
         case home = "house"
         case stats = "chart.bar"
-//        case achievements = "trophy"
+        case achievements = "trophy"
         case settings = "gearshape"
     }
 }

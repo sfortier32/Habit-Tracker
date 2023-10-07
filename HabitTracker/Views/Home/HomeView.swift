@@ -16,9 +16,9 @@ struct HomeView: View {
     @StateObject var hInt: HabitInteractions = HabitInteractions()
     
     @State var addHabit = false
-    @State private var selected: Date = Date().removeTimeStamp
+    @State private var date = Date.now.removeTimeStamp
+    @State private var dateSelected: Date = Date().removeTimeStamp
     @State private var selectedWeekday: String = DateModel().getWeekday(date: Date(), short: true)
-    @State private var currDate = Date.now.removeTimeStamp
     
     @Query var habits: [Habit]
     
@@ -33,15 +33,14 @@ struct HomeView: View {
             Color("c-cream")
                 .ignoresSafeArea()
             VStack {
-                // MARK: Title
+                // MARK: Header
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Hey, ").font(.custom("FoundersGrotesk-Regular", size: 40)) +
                         Text("\(UserDefaults.standard.string(forKey: "name") ?? "You")!").font(.custom("FoundersGrotesk-Medium", size: 40))
-                    }.baselineOffset(-12)
+                    }
+                    .baselineOffset(-12)
                     Spacer()
-                    
-                    // MARK: Add Habit
                     
                     Button {
                         addHabit.toggle()
@@ -50,9 +49,10 @@ struct HomeView: View {
                             .resize(h: 20)
                             .padding(.horizontal)
                     }
-                }.padding(.horizontal)
-                    .padding(.top, 12)
-                    .padding(.vertical, 12)
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 12)
+                .padding(.top, 12)
                 
                 // MARK: Date Display
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -65,42 +65,49 @@ struct HomeView: View {
                             Button {
                                 // MARK: Set new habits
                                 selectedWeekday = weekday
-                                selected = cur
+                                dateSelected = cur
                             } label: {
-                                DateView(cur, selected, day, weekday)
+                                DateView(cur, dateSelected, day, weekday)
                             }
                         }
                     }
-                }.padding(.horizontal, 10)
-                    .padding(.bottom, 5)
+                }
+                .padding(.horizontal, 10)
+                .padding(.bottom, 5)
                 
                 // MARK: Habit List
-                HabitList(date: selected, weekday: selectedWeekday, count: getCount())
+                HabitList(date: dateSelected, weekday: selectedWeekday, count: getCount())
                     .environmentObject(hInt)
                 TabsView()
                     .environmentObject(tm)
+                    .padding(.top, 15)
             }
+        
         }.onAppear(perform: {
-            if UserDefaults.standard.string(forKey: "today") != self.fm.string(from: currDate) {
+            if UserDefaults.standard.string(forKey: "today") != self.fm.string(from: date) {
                 updateHabits()
             }
         })
         .sheet(isPresented: $hInt.openHabitView, content: {
             HabitView(editor: true, pageOpen: $hInt.openHabitView, habit: hInt.habit)
                 .environmentObject(hInt)
-                .interactiveDismissDisabled()
         })
         .sheet(isPresented: $addHabit, content: {
             HabitView(editor: false, pageOpen: $addHabit, habit: nil)
                 .environmentObject(hInt)
-                .interactiveDismissDisabled()
+        })
+        .sheet(isPresented: $hInt.openTimer, content: {
+            TimerView(habit: hInt.habit, date: dateSelected)
+                .environmentObject(hInt)
         })
     }
+    
+    // MARK: Functions
     func updateHabits() -> Void {
         for hb in habits {
             hb.notDone.sort() // sort data so break works
             for day in hb.notDone {
-                if day < currDate { // if habit isn't done and past due
+                if day < date { // if habit isn't done and past due
                     hb.notDone.removeAll(where: {$0 == day }) // remove from notDone
                     hb.missed.append(day) // append to missed
                 } else {
@@ -111,7 +118,7 @@ struct HomeView: View {
             
             hb.missed = hb.missed.sorted().reversed()
             for day in hb.missed {
-                if day >= currDate || day < hb.dateAdded {
+                if day >= date || day < hb.dateAdded {
                     hb.missed.removeAll(where: { $0 == day }) // remove from missed
                     hb.notDone.append(day) // append to notDone
                 }
@@ -122,7 +129,7 @@ struct HomeView: View {
     func getCount() -> Int {
         var cnt = 0
         for hb in habits {
-            if hb.dateAdded <= currDate && hb.weekDays.contains(selectedWeekday) {
+            if hb.dateAdded <= date && hb.weekdays.contains(selectedWeekday) {
                 cnt += 1
             }
         }

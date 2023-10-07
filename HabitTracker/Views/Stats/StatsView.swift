@@ -16,6 +16,7 @@ struct StatsView: View {
     @Environment (\.modelContext) var mc
     
     @State var bigStreaks = UserDefaults.standard.bool(forKey: "bigStreaks")
+    @State var bigWeekly = UserDefaults.standard.bool(forKey: "bigWeekly")
     let bigCols = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
     let smallCols = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12),
                      GridItem(.flexible(), spacing: 12)]
@@ -32,8 +33,7 @@ struct StatsView: View {
                 ScrollView(showsIndicators: false) {
                     // MARK: Streaks
                     HStack {
-                        Text("Streaks").header2()
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        Text("Streaks").header2().leading()
                             .baselineOffset(-8)
                         Button {
                             bigStreaks.toggle()
@@ -41,15 +41,14 @@ struct StatsView: View {
                             Image(systemName: bigStreaks ? "arrow.down.left.square" : "arrow.up.right.square")
                                 .resize(h: 24)
                         }
-                    }.padding(.horizontal)
-                        .padding(.top, 4)
+                    }.padding(.top, 4)
                     
                     if bigStreaks {
                         LazyVGrid(columns: bigCols, spacing: 12) {
                             ForEach(habits) { hb in
                                 Rectangle()
                                     .fill(Color.background)
-                                    .frame(height: UIScreen.main.bounds.width/2.75)
+                                    .frame(height: UIScreen.main.bounds.width/2.8)
                                     .cornerRadius(10)
                                     .overlay {
                                         HStack {
@@ -61,13 +60,16 @@ struct StatsView: View {
                                                         .resize(w: 24, h: 24)
                                                 } // end hstack
                                                 Spacer()
+                                                Text("\(hb.category?.title ?? "")").text3()
+                                                    .foregroundColor(.darkgray)
+                                                    .padding(.bottom, -2)
                                                 Text("\(hb.title)").text1()
                                             } // end vstack
                                             Spacer()
                                         }.padding(.all, 18) // end hstack
                                     }
                             }
-                        }.padding(.horizontal, 16)
+                        }
                     } else {
                         LazyVGrid(columns: smallCols, spacing: 12) {
                             ForEach(habits) { hb in
@@ -79,58 +81,71 @@ struct StatsView: View {
                                         HStack {
                                             Text("\(hb.streak)").cust(30, true)
                                                 .baselineOffset(-10)
-//                                                .border(.red)
                                             Spacer().frame(width: 20)
                                             Image(systemName: hb.imageName)
                                                 .resize(w: 24, h: 24)
-                                        }.padding(.all, 18) // end hstack
-//                                            .border(.black)
+                                        } // end hstack
+                                        .padding(.all, 18)
                                     }
                             }
-                        }.padding(.horizontal, 16)
+                        }
                     }
                     Spacer().frame(height: 30)
                     
                     // MARK: Weekly
-                    Text("Weekly").header2()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal)
+                    HStack {
+                        Text("Weekly").header2().leading()
+                        Button {
+                            bigWeekly.toggle()
+                        } label: {
+                            Image(systemName: bigWeekly ? "arrow.down.left.square" : "arrow.up.right.square")
+                                .resize(h: 24)
+                        }
+                    }
+                    
                     VStack(spacing: 14) {
                         ForEach(habits) { hb in
                             HStack {
-                                VStack {
-                                    Spacer()
-                                    Text(hb.title).text2()
-                                        .frame(maxWidth: 120, alignment: .leading)
+                                if bigWeekly {
+                                    VStack {
+                                        Spacer()
+                                        if hb.category != nil {
+                                            Text(hb.category!.title).text4().leading()
+                                                .foregroundColor(.darkgray)
+                                        }
+                                        Text(hb.title).text2().leading()
+                                    }
+                                } else {
+                                    Image(systemName: hb.imageName)
+                                        .resize(w: 24, h: 24)
+                                        .frame(width: 70)
                                 }
+                                Divider()
+                                    .padding(.horizontal, 5)
                                 HStack {
-                                    ForEach(dm.getThisWeek(), id: \.self) { day in
-                                        let weekday = dm.getWeekday(date: day, short: true)
-                                        VStack {
-                                            Text(weekday)
-                                                .cust(14, true)
-                                                .textCase(.uppercase)
-                                                .padding(.bottom, -2)
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .frame(width: 26, height: 26)
-                                                .foregroundColor(!hb.weekDays.contains(weekday) || hb.notDone.contains(day) ? .grayshadow : (
-                                                    hb.done.contains(day) ? .grn : (
-                                                        hb.missed.contains(day) ? .red : .blue)))
-                                        }.frame(width: 26)
+                                    ForEach(dm.getThisWeek(), id: \.self) { date in
+                                        let weekday = dm.getWeekday(date: date, short: true)
+                                        HabitStack(habit: hb, date: date, weekday: weekday, arr:
+                                                    hb.done.contains(date) ? Completion.done :
+                                                    hb.notDone.contains(date) ? Completion.notDone :
+                                                    hb.missed.contains(date) ? Completion.missed :
+                                                    Completion.skipped)
                                     }
                                 }
-                            }.padding()
-                                .background(Color.background)
-                                .cornerRadius(10)
-                                .clipped()
+                                .center()
+                            }
+                            .padding()
+                            .background(Color.background)
+                            .cornerRadius(10)
+                            .clipped()
                         }
-                    }.frame(maxWidth: .infinity)
-                    .padding(.horizontal)
-                    .padding(.bottom, 20)
-                    
+                        .frame(minHeight: 80)
+                    }
+                    .padding(.bottom, 15)
                 }
                 .VMask()
                 .foregroundColor(.blck)
+                .padding(.horizontal)
                 
                 
                 TabsView()
@@ -141,6 +156,7 @@ struct StatsView: View {
         })
         .onDisappear(perform: {
             UserDefaults.standard.set(bigStreaks, forKey: "bigStreaks")
+            UserDefaults.standard.set(bigWeekly, forKey: "bigWeekly")
         })
     }
     func calculateStreaks() -> Void {
@@ -160,4 +176,27 @@ struct StatsView: View {
         .environmentObject(DateModel())
         .modelContainer(PreviewSampleData.container)
         .modelContainer(for: [Habit.self, Category.self, Achievements.self], inMemory: true)
+}
+
+struct HabitStack: View {
+    var habit: Habit
+    var date: Date
+    var weekday: String
+    var arr: Completion
+    
+    var body: some View {
+        VStack {
+            Text(weekday)
+                .cust(14, true)
+                .textCase(.uppercase)
+                .padding(.bottom, -2)
+            RoundedRectangle(cornerRadius: 15)
+                .frame(width: 26, height: 26)
+                .foregroundColor(arr == .notDone ? .grayshadow : (
+                        (arr == .done ? .grn :
+                        (arr == .missed ? .red : .blue)))
+                )
+        }.frame(width: 26)
+        .opacity(habit.weekdays.contains(weekday) ? 1 : 0.3)
+    }
 }

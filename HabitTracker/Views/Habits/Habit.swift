@@ -16,18 +16,18 @@ class HabitInteractions: ObservableObject {
     init() {
         self.openHabitView = false
         self.openTimer = false
-        self.habit = Habit(title: "", weekDays: [], freqType: "", frequency: 0, imageName: "pills")
+        self.habit = Habit(title: "", weekdays: [], freqType: "", frequency: 0, imageName: "pills")
     }
 }
 
 @Model
 class Habit {
     var title: String
-    var weekDays: [String]
+    var weekdays: [String]
     var freqType: String
     var frequency: Double
     
-    var dateAdded: Date
+    var dateAdded: Date = Date.now.removeTimeStamp
     var firstOccurence: Date
     
     var notDone: [Date] = []
@@ -38,15 +38,16 @@ class Habit {
     
     var imageName: String
     var streak: Int = 0
-    var category: Category?
+    var category: Category? = nil
+    var timers: [Date:Int] = [:]
+    var minutes: Int = 0
     
-    init(title: String, weekDays: [String], freqType: String, frequency: Double, imageName: String, category: Category) {
+    init(title: String, weekdays: [String], freqType: String, frequency: Double, imageName: String, category: Category) {
         self.title = title
-        self.weekDays = weekDays
+        self.weekdays = weekdays
         self.freqType = freqType
         self.frequency = frequency
-        self.dateAdded = Date().removeTimeStamp
-        self.firstOccurence = DateModel().getFirstOccurence(date: Date().removeTimeStamp, occurences: weekDays)
+        self.firstOccurence = DateModel().getFirstOccurence(date: Date().removeTimeStamp, occurences: weekdays)
         self.imageName = imageName
         self.category = category
         
@@ -55,13 +56,12 @@ class Habit {
             self.notDone.append(dy)
         }
     }
-    init(title: String, weekDays: [String], freqType: String, frequency: Double, imageName: String) {
+    init(title: String, weekdays: [String], freqType: String, frequency: Double, imageName: String) {
         self.title = title
-        self.weekDays = weekDays
+        self.weekdays = weekdays
         self.freqType = freqType
         self.frequency = frequency
-        self.dateAdded = Date().removeTimeStamp
-        self.firstOccurence = DateModel().getFirstOccurence(date: Date().removeTimeStamp, occurences: weekDays)
+        self.firstOccurence = DateModel().getFirstOccurence(date: Date().removeTimeStamp, occurences: weekdays)
         self.imageName = imageName
         self.category = nil
         

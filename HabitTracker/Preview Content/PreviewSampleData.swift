@@ -41,20 +41,20 @@ actor PreviewSampleData {
 // Default quakes for use in previews.
 extension Habit {
     static var one: Habit {
-        .init(title: "Water the plants", weekDays: ["Mo", "Tu", "We", "Th"], freqType: "times", frequency: 1, imageName: "leaf")
+        .init(title: "Water the plants", weekdays: ["Su", "Th"], freqType: "times", frequency: 1, imageName: "leaf")
     }
     static var two: Habit {
-        .init(title: "Brush teeth", weekDays: ["Su", "Mo", "Tu", "We", "Th", "Fr"], freqType: "minutes", frequency: 2, imageName: "mouth", category: Category.morning)
+        .init(title: "Read", weekdays: ["Su", "Tu", "We", "Th"], freqType: "minutes", frequency: 30, imageName: "mouth", category: Category.afternoon)
     }
     static var three: Habit {
-        .init(title: "Drink water", weekDays: ["Mo", "Tu", "We"], freqType: "oz", frequency: 40, imageName: "waterbottle")
+        .init(title: "Drink water", weekdays: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"], freqType: "oz", frequency: 40, imageName: "waterbottle")
     }
 }
 
 
 extension Category {
-    static var morning: Category {
-        .init(title: "Morning", orderIndex: 0)
+    static var afternoon: Category {
+        .init(title: "Afternoon", orderIndex: 0)
     }
     static var evening: Category {
         .init(title: "Evening", orderIndex: 1)
