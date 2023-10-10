@@ -162,9 +162,9 @@ struct StatsView: View {
     func calculateStreaks() -> Void {
         for hb in habits {
             if let last = hb.missed.last {
-                hb.streak = hb.allTypesDone.lazy.filter{ $0 > last }.count
+                hb.streak = hb.allTypesDone.lazy.filter{ $0 > last && !hb.skipped.contains($0) }.count
             } else {
-                hb.streak = hb.allTypesDone.count
+                hb.streak = hb.allTypesDone.lazy.filter{ !hb.skipped.contains($0) }.count
             }
         }
     }
