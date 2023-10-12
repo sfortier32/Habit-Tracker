@@ -75,7 +75,7 @@ struct AchievementsView: View {
                             }.zIndex(Double(Array(ach[0].newUnlockedNames.keys).firstIndex(where: { $0 == key })!) + 1.0)
                     }
                 }
-                if count == ach[0].newUnlockedNames.keys.count {
+                if count == ach[0].newUnlockedNames.keys.count || ach[0].newUnlockedNames.values.allSatisfy({$0}) {
                     let _ = resetValues()
                 }
             } else {
@@ -84,6 +84,7 @@ struct AchievementsView: View {
         }.onAppear(perform: {
             self.calculateCompleted()
             self.calculateUnlocks()
+            print(ach[0].newUnlockedNames.values)
         })
     }
     
