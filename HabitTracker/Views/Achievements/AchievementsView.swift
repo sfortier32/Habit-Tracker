@@ -30,7 +30,7 @@ struct NewBadgePopUp: View {
                         .header1()
                         .center()
                 } else {
-                    Text("You've worked at habits for \(ach[0].minutesCompleted)!")
+                    Text("You've worked at habits for \(ach[0].minuteNames[name]!)!")
                         .header1()
                         .center()
                 }
@@ -84,7 +84,6 @@ struct AchievementsView: View {
         }.onAppear(perform: {
             self.calculateCompleted()
             self.calculateUnlocks()
-            print(ach[0].newUnlockedNames.values)
         })
     }
     
@@ -171,7 +170,7 @@ struct AchievementsView: View {
         var minutes = 0
         for hb in habits {
             if hb.freqType == "minutes" {
-                minutes += Int(hb.frequency)
+                minutes += Int(hb.done.count) * Int(hb.frequency)
             }
         }
         ach[0].minutesCompleted = minutes

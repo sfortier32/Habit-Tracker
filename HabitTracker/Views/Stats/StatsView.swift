@@ -55,10 +55,12 @@ struct StatsView: View {
                                             VStack(alignment: .leading) {
                                                 HStack {
                                                     Text("\(hb.streak)").cust(32, true)
+                                                        .baselineOffset(-10)
                                                     Spacer()
                                                     Image(systemName: hb.imageName)
                                                         .resize(w: 24, h: 24)
                                                 } // end hstack
+                                                .padding(.top, -5)
                                                 Spacer()
                                                 Text("\(hb.category?.title ?? "")").text3()
                                                     .foregroundColor(.darkgray)

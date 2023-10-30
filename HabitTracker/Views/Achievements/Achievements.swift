@@ -48,7 +48,6 @@ class Achievements {
         "streaks_ach6_365": "1 year"
         
     ]
-    
     var taskNames: [String:String] = [
         "tasks_ach1_10": "10 tasks",
         "tasks_ach2_25": "25 tasks",

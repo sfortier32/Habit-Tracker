@@ -45,8 +45,8 @@ struct About: View {
                     VSpacer(30)
                     
                     
-                    Text("Disclosure").padding(.bottom, 2).cust(32, true)
-                    Text("All code for the confetti effects was provided by @shaundon on GitHub under the repository \"ConfettiDemo.\" All other code is my, Sophia Fortier, own and this app has been developed solely for personal use due to non-commercial licensure on the Founders Grotesk font.")
+                    Text("Attributions").padding(.bottom, 2).cust(32, true)
+                    Text("All code for the confetti effects was provided by @shaundon on GitHub under the repository \"ConfettiDemo.\"")
                     
                 }
                 .font(.custom("FoundersGrotesk-Regular", size: 22))
