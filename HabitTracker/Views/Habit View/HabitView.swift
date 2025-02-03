@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HabitView: View {
     @State var cInt: CategoryInteractions
+    @State var sInt: StreakInteractions
     @Environment(\.modelContext) var mc
     @EnvironmentObject var hInt: HabitInteractions
     
@@ -38,16 +39,22 @@ struct HabitView: View {
         self.editor = editor
         self.pageOpen = pageOpen
         
-        if habit != nil {
-            self.editingHabit = habit
+        if (habit != nil) {
             self.title = habit!.title
             self.icon = habit!.imageName
             self.freq = habit!.frequency
             self.freqType = habit!.freqType
             self.selectedDays = habit!.weekdays
             self.cInt = CategoryInteractions(selected: habit!.category)
+            if (editor) {
+                self.editingHabit = habit
+                self.sInt = StreakInteractions(selected: habit!.mergeWith)
+            } else {
+                self.sInt = StreakInteractions(selected: nil)
+            }
         } else {
             self.cInt = CategoryInteractions(selected: nil)
+            self.sInt = StreakInteractions(selected: nil)
         }
     }
     
@@ -157,21 +164,32 @@ struct HabitView: View {
                             NavigationLink {
                                 SymbolPicker(selected: $icon)
                             } label: { ListButton("Icon") }
+                            NavigationLink {
+                                StreakMerge(duplicated: true)
+                                    .environmentObject(sInt)
+                                    .environmentObject(hInt)
+                            } label: { ListButton("Merge Streaks") }
                         }.foregroundColor(.blck)
+                            .padding(.bottom, 20)
                     }
                     .VMask()
                     .padding()
                     .font(.custom("FoundersGrotesk-Regular", size: 22))
                     
+                    
+                    // MARK: Submit
                     Button("Submit") {
-                        if editor {
+                        if (editor) {
                             editingHabit!.title = title
                             editingHabit!.weekdays = selectedDays
                             editingHabit!.freqType = freqType.lowercased()
                             editingHabit!.frequency = freq
                             editingHabit!.imageName = icon
                             editingHabit!.category = cInt.selected
+                            editingHabit!.categoryIndex = cInt.selected?.orderIndex ?? Int.max
                             editingHabit!.timers = [:]
+                            editingHabit!.mergeWith = sInt.selected
+                            sInt.selected?.mergeWith = editingHabit
                             do {
                                 try mc.save()
                             } catch {
@@ -185,10 +203,16 @@ struct HabitView: View {
                                 frequency: freq,
                                 imageName: icon)
                             newHabit.category = cInt.selected
+                            newHabit.categoryIndex = cInt.selected?.orderIndex ?? Int.max
+                            newHabit.mergeWith = sInt.selected
+                            if (editingHabit != nil) {
+                                newHabit.dateAdded = Date.now.removeTimeStamp
+                            }
                             mc.insert(newHabit)
                             hInt.objectWillChange.send()
                         }
                         pageOpen.wrappedValue.toggle()
+                        
                     }.disabled(title.isEmpty || selectedDays.isEmpty || freqType.isEmpty)
                         .font(.custom("FoundersGrotesk-Regular", size: 22))
                     VSpacer(18)
@@ -212,8 +236,8 @@ struct RadioButton: View {
             Text(title)
                 .font(.custom(cond ? "FoundersGrotesk-Medium" : "FoundersGrotesk-Regular", size: 20))
                 .padding([.leading, .trailing], 18)
-                .padding([.top, .bottom], 12)
-                .baselineOffset(-3)
+                .padding([.top, .bottom], 11)
+                .baselineOffset(-5)
                 .foregroundColor(.blck)
                 .background(cond ? Color.grn : Color.background, in: RoundedRectangle(cornerRadius: 25, style: .continuous))
             

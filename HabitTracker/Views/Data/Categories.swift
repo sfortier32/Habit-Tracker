@@ -39,3 +39,9 @@ struct CategoryHeader: View {
         }
     }
 }
+
+extension Category {
+    static var None: Category {
+        .init(title: "None", orderIndex: 0)
+    }
+}

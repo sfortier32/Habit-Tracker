@@ -7,13 +7,6 @@
 
 import SwiftUI
 
-enum Completion: Identifiable {
-    var id: Self {
-        return self
-    }
-    case done, notDone, skipped, missed
-}
-
 struct HabitRow: View {
     let hb: Habit
     let date: Date
@@ -119,8 +112,8 @@ struct HabitRow: View {
                             .frame(height: 7).padding(.top, 16)
                         
                     }
-                    let postfix = hb.freqType == "minutes" ? "min" : (hb.freqType == "times" ? (hb.frequency > 1 ? "times" : "time") : hb.freqType)
-                    let prefix = hb.freqType == "minutes" ? hb.frequency.cleanValue + " " : ""
+                    let prefix = hb.freqType == "minutes" ? (hb.frequency > 1 ? hb.frequency.cleanValue : (hb.frequency * 60).cleanValue) + " " : ""
+                    let postfix = hb.freqType == "minutes" ? (hb.frequency < 1 ? "sec" : "min") : (hb.freqType == "times" ? (hb.frequency > 1 ? "times" : "time") : hb.freqType)
                     Text(prefix + postfix).text4()
                     Spacer()
                 }.frame(width: 70, height: 50)

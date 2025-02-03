@@ -8,10 +8,10 @@
 import SwiftUI
 
 class Symbols: ObservableObject {
-    @State var health: [String] = ["pills", "cross.vial", "comb", "waterbottle", "brain.filled.head.profile", "lungs", "mouth"]
+    @State var health: [String] = ["pills", "cross.vial", "comb", "waterbottle", "brain", "brain.filled.head.profile", "lungs", "mouth", "heart", "allergens"]
     @State var fitness: [String] = ["figure.walk", "figure.run", "figure.barre", "figure.bowling", "figure.climbing", "figure.indoor.cycle", "figure.mind.and.body", "figure.strengthtraining.traditional", "football", "baseball", "basketball", "soccerball", "tennis.racket", "dumbbell", "bicycle", "sportscourt", "water.waves"]
     @Published var home: [String] = ["stove", "dishwasher", "washer", "dryer", "frying.pan", "cart", "trash"]
-    @Published var nature: [String] = ["cat", "dog", "pawprint", "sun.horizon", "sun.max", "drop", "leaf", "tree"]
+    @Published var nature: [String] = ["cat", "dog", "pawprint", "sun.horizon", "sun.max", "moon", "drop", "leaf", "tree"]
     @Published var other: [String] = ["questionmark", "pencil", "book", "books.vertical", "calendar", "bell"]
     @Published var technology: [String] = ["iphone", "macbook", "applewatch", "tv", "headphones", "earbuds", "gamecontroller", "apple.terminal.on.rectangle"]
     

@@ -102,6 +102,9 @@ struct CategoryList: View {
                 updatedCategs.move(fromOffsets: from, toOffset: to)
                 for (index, categ) in updatedCategs.enumerated() {
                     categ.orderIndex = index
+                    for hb in categ.habits {
+                        hb.categoryIndex = index
+                    }
                 }
             }
         }.customListStyle

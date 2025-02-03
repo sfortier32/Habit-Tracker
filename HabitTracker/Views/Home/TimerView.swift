@@ -74,7 +74,7 @@ struct TimerView: View {
                         .padding(.top, 125)
                 }
                 
-                VSpacer(80)
+                VSpacer(65)
                 Button {
                     if timerDone {
                         hInt.openTimer.toggle()
@@ -94,7 +94,7 @@ struct TimerView: View {
                             
                         }
                 }
-                VSpacer(40)
+                VSpacer(28)
                 Button {
                     timerOn = false
                     restartTimer.toggle()
@@ -102,7 +102,7 @@ struct TimerView: View {
                     Text("Restart").text1()
                 }.padding(.vertical)
                 
-                VSpacer(40)
+                VSpacer(30)
                 
             }.onReceive(timer) { _ in
                 if timerOn && habit.timers[date]! > 0 {
@@ -112,6 +112,7 @@ struct TimerView: View {
                         timerDone = true
                         habit.done.append(date)
                         habit.allTypesDone.append(date)
+                        habit.notDone.removeAll(where: { $0 == date })
                         habit.minutes += Int(habit.frequency)
                     }
                 }

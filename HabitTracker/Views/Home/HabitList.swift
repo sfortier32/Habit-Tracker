@@ -14,7 +14,7 @@ struct HabitList: View {
     var count: Int
     
     @State var deleteHabit: Bool = false
-    @State var habitToDelete: Habit? = nil
+    @State var activeHabit: Habit? = nil
     
     @Environment(\.modelContext) private var mc
     @EnvironmentObject var hInt: HabitInteractions
@@ -22,11 +22,7 @@ struct HabitList: View {
     @Query var habitsWOCateg: [Habit]
     @Query(sort: \Category.orderIndex) var categs: [Category]
     
-    init(
-        date: Date,
-        weekday: String,
-        count: Int
-    ) {
+    init(date: Date, weekday: String, count: Int) {
         self.weekday = weekday
         self.date = date
         self.count = count
@@ -77,14 +73,25 @@ struct HabitList: View {
                                         hb.missed.contains(date) ? Completion.missed :
                                         Completion.skipped)
                             .customListButton
-                            .swipeThreeActions(hb: hb, date: date)
+                            .customSwipeActions(hb: hb, date: date)
                             .swipeActions(edge: .leading, allowsFullSwipe: true) {
                                 Button(role: .destructive) {
-                                    habitToDelete = hb
+                                    activeHabit = hb
                                     deleteHabit.toggle()
                                 } label: {
-                                    Image(systemName: "trash")
+                                    Label(
+                                        title: { Text("Delete") },
+                                        icon: { Image(systemName: "trash") })
                                 }
+                                Button() { // duplicate
+                                    activeHabit = hb
+                                    hInt.habit = hb
+                                    hInt.duplicateHabit = true
+                                } label: {
+                                    Label(
+                                        title: { Text("Duplicate") },
+                                        icon: { Image(systemName: "plus.square.on.square" )})
+                                }.tint(.pink)
                             }
                         } // end foreach habits
                     } // end foreach categs
@@ -101,14 +108,25 @@ struct HabitList: View {
                                     Completion.skipped
                         )
                             .customListButton
-                            .swipeThreeActions(hb: hb, date: date)
+                            .customSwipeActions(hb: hb, date: date)
                             .swipeActions(edge: .leading, allowsFullSwipe: true) {
                                 Button(role: .destructive) {
-                                    habitToDelete = hb
+                                    activeHabit = hb
                                     deleteHabit.toggle()
                                 } label: {
-                                    Image(systemName: "trash")
+                                    Label(
+                                        title: { Text("Delete") },
+                                        icon: { Image(systemName: "trash") })
                                 }
+                                Button() { // duplicate
+//                                    activeHabit = hb
+//                                    hInt.habit = activeHabit
+//                                    hInt.duplicateHabit = true
+                                } label: {
+                                    Label(
+                                        title: { Text("Duplicate") },
+                                        icon: { Image(systemName: "plus.square.on.square" )})
+                                }.tint(.pink)
                             }
                     } // end foreach
                 } // end ifEmpty
@@ -116,13 +134,13 @@ struct HabitList: View {
             .customListStyle // end list
             .VMask()
             
-            .confirmationDialog("Are you sure you want to delete " + (habitToDelete == nil ? "this habit?" : "\"\(habitToDelete!.title)\"?"), isPresented: $deleteHabit, titleVisibility: .visible) {
+            .confirmationDialog("Are you sure you want to delete " + (activeHabit == nil ? "this habit?" : "\"\(activeHabit!.title)\"?"), isPresented: $deleteHabit, titleVisibility: .visible) {
                 Button("Yes", role: .destructive) {
                     deleteHabit.toggle()
-                    if let hb = habitToDelete {
+                    if let hb = activeHabit {
                         mc.delete(hb)
                     }
-                    habitToDelete = nil
+                    activeHabit = nil
                 }
             }
             

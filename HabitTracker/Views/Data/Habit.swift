@@ -12,11 +12,13 @@ class HabitInteractions: ObservableObject {
     @Published var openHabitView: Bool
     @Published var openTimer: Bool
     @Published var habit: Habit
+    @Published var duplicateHabit: Bool
     
     init() {
         self.openHabitView = false
         self.openTimer = false
         self.habit = Habit(title: "", weekdays: [], freqType: "", frequency: 0, imageName: "pills")
+        self.duplicateHabit = false
     }
 }
 
@@ -38,9 +40,12 @@ class Habit {
     
     var imageName: String
     var streak: Int = 0
-    var category: Category? = nil
+    var category: Category?
+    var categoryIndex: Int
     var timers: [Date:Int] = [:]
     var minutes: Int = 0
+    
+    var mergeWith: Habit? = nil
     
     init(title: String, weekdays: [String], freqType: String, frequency: Double, imageName: String, category: Category) {
         self.title = title
@@ -50,6 +55,7 @@ class Habit {
         self.firstOccurence = DateModel().getFirstOccurence(date: Date().removeTimeStamp, occurences: weekdays)
         self.imageName = imageName
         self.category = category
+        self.categoryIndex = category.orderIndex
         
         for day in DateModel().getDateCarousel() {
             let dy = day.removeTimeStamp
@@ -64,6 +70,7 @@ class Habit {
         self.firstOccurence = DateModel().getFirstOccurence(date: Date().removeTimeStamp, occurences: weekdays)
         self.imageName = imageName
         self.category = nil
+        self.categoryIndex = Int.max
         
         for day in DateModel().getDateCarousel() {
             let dy = day.removeTimeStamp

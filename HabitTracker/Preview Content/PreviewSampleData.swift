@@ -27,7 +27,7 @@ actor PreviewSampleData {
             Habit.one,
             Habit.two,
             Habit.three,
-            Achievements.test
+            Habit.four,
         ]
         Task { @MainActor in
             sampleData.forEach {
@@ -38,26 +38,32 @@ actor PreviewSampleData {
     }
 }
 
-// Default quakes for use in previews.
+// Default habits for use in previews.
 extension Habit {
     static var one: Habit {
         .init(title: "Water the plants", weekdays: ["Su", "Th"], freqType: "times", frequency: 1, imageName: "leaf")
     }
     static var two: Habit {
-        .init(title: "Read", weekdays: ["Su", "Tu", "We", "Th"], freqType: "minutes", frequency: 30, imageName: "mouth", category: Category.afternoon)
+        .init(title: "Brush teeth", weekdays: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"], freqType: "minutes", frequency: 2, imageName: "mouth", category: Category.morning)
     }
     static var three: Habit {
-        .init(title: "Drink water", weekdays: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"], freqType: "oz", frequency: 40, imageName: "waterbottle")
+        .init(title: "Read", weekdays: ["Su", "Tu", "We", "Th"], freqType: "pages", frequency: 30, imageName: "book", category: Category.evening)
+    }
+    static var four: Habit {
+        .init(title: "Workout", weekdays: ["Tu"], freqType: "minutes", frequency: 30, imageName: "figure.run", category: Category.evening)
     }
 }
 
 
 extension Category {
+    static var morning: Category {
+        .init(title: "Morning", orderIndex: 0)
+    }
     static var afternoon: Category {
-        .init(title: "Afternoon", orderIndex: 0)
+        .init(title: "Afternoon", orderIndex: 1)
     }
     static var evening: Category {
-        .init(title: "Evening", orderIndex: 1)
+        .init(title: "Evening", orderIndex: 2)
     }
 }
 extension Achievements {

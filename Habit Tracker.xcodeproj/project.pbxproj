@@ -36,6 +36,8 @@
 		E45A98E12AA568420083C7D6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45A98E02AA568420083C7D6 /* SettingsView.swift */; };
 		E45A98E32AA5685B0083C7D6 /* TermsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45A98E22AA5685B0083C7D6 /* TermsView.swift */; };
 		E45A98E62AA569460083C7D6 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45A98E52AA569460083C7D6 /* StatsView.swift */; };
+		E45F4A012D4FF1780054D856 /* StreakMerge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F4A002D4FF1730054D856 /* StreakMerge.swift */; };
+		E45F4A042D50269F0054D856 /* Completion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F4A032D50269D0054D856 /* Completion.swift */; };
 		E476E7E42AC45A98006D0993 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E476E7E32AC45A98006D0993 /* Timer.swift */; };
 		E476E7E62AC45B99006D0993 /* Achievements.swift in Sources */ = {isa = PBXBuildFile; fileRef = E476E7E52AC45B99006D0993 /* Achievements.swift */; };
 		E476E7EA2AC60E5F006D0993 /* Badges.swift in Sources */ = {isa = PBXBuildFile; fileRef = E476E7E92AC60E5F006D0993 /* Badges.swift */; };
@@ -78,6 +80,8 @@
 		E45A98E22AA5685B0083C7D6 /* TermsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsView.swift; sourceTree = "<group>"; };
 		E45A98E42AA568BE0083C7D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E45A98E52AA569460083C7D6 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		E45F4A002D4FF1730054D856 /* StreakMerge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakMerge.swift; sourceTree = "<group>"; };
+		E45F4A032D50269D0054D856 /* Completion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Completion.swift; sourceTree = "<group>"; };
 		E476E7E32AC45A98006D0993 /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		E476E7E52AC45B99006D0993 /* Achievements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Achievements.swift; sourceTree = "<group>"; };
 		E476E7E92AC60E5F006D0993 /* Badges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badges.swift; sourceTree = "<group>"; };
@@ -99,14 +103,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E425F9A92AA6335400824597 /* Helpers */ = {
+		E425F9A92AA6335400824597 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				E45F4A032D50269D0054D856 /* Completion.swift */,
+				E476E7E32AC45A98006D0993 /* Timer.swift */,
+				E425F9B72AA6346200824597 /* Habit.swift */,
+				E426B11A2AC2094500A86A2E /* Categories.swift */,
 				E45A98DE2AA5681A0083C7D6 /* TabsView.swift */,
 				E45A98DC2AA567BF0083C7D6 /* TabModel.swift */,
-				E45A98E22AA5685B0083C7D6 /* TermsView.swift */,
+				E437F6C62AA796FC00CDCD08 /* DateModel.swift */,
 			);
-			path = Helpers;
+			path = Data;
 			sourceTree = "<group>";
 		};
 		E425F9AC2AA633B700824597 /* Stats */ = {
@@ -155,6 +163,7 @@
 			children = (
 				E45A98C72AA5670D0083C7D6 /* HabitTrackerApp.swift */,
 				E45A98C92AA5670D0083C7D6 /* ViewController.swift */,
+				E45A98E22AA5685B0083C7D6 /* TermsView.swift */,
 				E44ABC172ACE079D0085FF25 /* Extensions */,
 				E45A98DA2AA5672C0083C7D6 /* Views */,
 				E45A98E42AA568BE0083C7D6 /* Info.plist */,
@@ -178,11 +187,11 @@
 			isa = PBXGroup;
 			children = (
 				E476E7F12AC6342D006D0993 /* Home */,
-				E4BE723C2ACC5C7E00BF2E8B /* Habits */,
+				E4BE723C2ACC5C7E00BF2E8B /* Habit View */,
 				E425F9AC2AA633B700824597 /* Stats */,
 				E476E7F02AC63407006D0993 /* Settings */,
 				E426627F2AD0B7410040C6E5 /* Achievements */,
-				E425F9A92AA6335400824597 /* Helpers */,
+				E425F9A92AA6335400824597 /* Data */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -202,10 +211,7 @@
 			children = (
 				E45A98D82AA567290083C7D6 /* HomeView.swift */,
 				E426B11C2AC21E4B00A86A2E /* TimerView.swift */,
-				E476E7E32AC45A98006D0993 /* Timer.swift */,
 				E4BE723D2ACC607300BF2E8B /* DateView.swift */,
-				E437F6C62AA796FC00CDCD08 /* DateModel.swift */,
-				E416120C2AA6C029004397E6 /* HabitView.swift */,
 				E4041FCC2AB2351300789B87 /* HabitList.swift */,
 				E4041FCA2AB234F700789B87 /* HabitRow.swift */,
 			);
@@ -229,15 +235,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E4BE723C2ACC5C7E00BF2E8B /* Habits */ = {
+		E4BE723C2ACC5C7E00BF2E8B /* Habit View */ = {
 			isa = PBXGroup;
 			children = (
-				E425F9B72AA6346200824597 /* Habit.swift */,
+				E416120C2AA6C029004397E6 /* HabitView.swift */,
 				E4BE723A2ACB847600BF2E8B /* CategoryView.swift */,
-				E426B11A2AC2094500A86A2E /* Categories.swift */,
 				E4041FD72AB3CD9400789B87 /* SymbolPicker.swift */,
+				E45F4A002D4FF1730054D856 /* StreakMerge.swift */,
 			);
-			path = Habits;
+			path = "Habit View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -324,6 +330,8 @@
 				E44ABC162ACE07860085FF25 /* ExtOther.swift in Sources */,
 				E4BE723E2ACC607300BF2E8B /* DateView.swift in Sources */,
 				E416120D2AA6C029004397E6 /* HabitView.swift in Sources */,
+				E45F4A042D50269F0054D856 /* Completion.swift in Sources */,
+				E45F4A012D4FF1780054D856 /* StreakMerge.swift in Sources */,
 				E4041FD82AB3CD9400789B87 /* SymbolPicker.swift in Sources */,
 				E45A98E12AA568420083C7D6 /* SettingsView.swift in Sources */,
 				E45A98DF2AA5681A0083C7D6 /* TabsView.swift in Sources */,

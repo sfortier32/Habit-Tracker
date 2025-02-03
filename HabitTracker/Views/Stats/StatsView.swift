@@ -10,10 +10,10 @@ import SwiftData
 
 struct StatsView: View {
     
-    @Query(sort: \Habit.title) var habits: [Habit]
+    @Query(sort: [SortDescriptor(\Habit.title), SortDescriptor(\Habit.categoryIndex)]) var habits: [Habit]
     @EnvironmentObject var tm: TabModel
     @EnvironmentObject var dm: DateModel
-    @Environment (\.modelContext) var mc
+    @Environment(\.modelContext) var mc
     
     @State var bigStreaks = UserDefaults.standard.bool(forKey: "bigStreaks")
     @State var bigWeekly = UserDefaults.standard.bool(forKey: "bigWeekly")
@@ -46,49 +46,25 @@ struct StatsView: View {
                     if bigStreaks {
                         LazyVGrid(columns: bigCols, spacing: 12) {
                             ForEach(habits) { hb in
-                                Rectangle()
-                                    .fill(Color.background)
-                                    .frame(height: UIScreen.main.bounds.width/2.8)
-                                    .cornerRadius(10)
-                                    .overlay {
-                                        HStack {
-                                            VStack(alignment: .leading) {
-                                                HStack {
-                                                    Text("\(hb.streak)").cust(32, true)
-                                                        .baselineOffset(-10)
-                                                    Spacer()
-                                                    Image(systemName: hb.imageName)
-                                                        .resize(w: 24, h: 24)
-                                                } // end hstack
-                                                .padding(.top, -5)
-                                                Spacer()
-                                                Text("\(hb.category?.title ?? "")").text3()
-                                                    .foregroundColor(.darkgray)
-                                                    .padding(.bottom, -2)
-                                                Text("\(hb.title)").text1()
-                                            } // end vstack
-                                            Spacer()
-                                        }.padding(.all, 18) // end hstack
+                                if (hb.mergeWith != nil) {
+                                    if (hb.categoryIndex < hb.mergeWith?.categoryIndex ?? Int.max) {
+                                        BigStreak(hb: hb, showCateg: false, streak: min(hb.streak, hb.mergeWith?.streak ?? 0))
                                     }
+                                } else {
+                                    BigStreak(hb: hb, showCateg: true, streak: hb.streak)
+                                }
                             }
                         }
                     } else {
                         LazyVGrid(columns: smallCols, spacing: 12) {
                             ForEach(habits) { hb in
-                                Rectangle()
-                                    .fill(Color.background)
-                                    .frame(height: UIScreen.main.bounds.width/7)
-                                    .cornerRadius(10)
-                                    .overlay {
-                                        HStack {
-                                            Text("\(hb.streak)").cust(30, true)
-                                                .baselineOffset(-10)
-                                            Spacer().frame(width: 20)
-                                            Image(systemName: hb.imageName)
-                                                .resize(w: 24, h: 24)
-                                        } // end hstack
-                                        .padding(.all, 18)
+                                if (hb.mergeWith != nil) {
+                                    if (hb.categoryIndex < hb.mergeWith?.categoryIndex ?? Int.max) {
+                                        SmallStreak(hb: hb, streak: min(hb.streak, hb.mergeWith?.streak ?? 0))
                                     }
+                                } else {
+                                    SmallStreak(hb: hb, streak: hb.streak)
+                                }
                             }
                         }
                     }
@@ -107,41 +83,40 @@ struct StatsView: View {
                     
                     VStack(spacing: 14) {
                         ForEach(habits) { hb in
-                            HStack {
-                                if bigWeekly {
-                                    VStack {
-                                        Spacer()
-                                        if hb.category != nil {
-                                            Text(hb.category!.title).text4().leading()
-                                                .foregroundColor(.darkgray)
+                            if (hb.mergeWith != nil) {
+                                if (hb.categoryIndex < hb.mergeWith?.categoryIndex ?? Int.max) {
+                                    HStack {
+                                        if (bigWeekly) {
+                                            BigWeeklyHeader(hb: hb, showCateg: false)
+                                        } else {
+                                            SmallWeeklyHeader(hb: hb)
                                         }
-                                        Text(hb.title).text2().leading()
+                                        Divider().padding(.horizontal, 5)
+                                        WeeklyView(dm: dm, hb: hb)
                                     }
-                                } else {
-                                    Image(systemName: hb.imageName)
-                                        .resize(w: 24, h: 24)
-                                        .frame(width: 70)
+                                    .padding()
+                                    .background(Color.background)
+                                    .cornerRadius(10)
+                                    .clipped()
+                                    .frame(minHeight: 80)
                                 }
-                                Divider()
-                                    .padding(.horizontal, 5)
+                            } else {
                                 HStack {
-                                    ForEach(dm.getThisWeek(), id: \.self) { date in
-                                        let weekday = dm.getWeekday(date: date, short: true)
-                                        HabitStack(habit: hb, date: date, weekday: weekday, arr:
-                                                    hb.done.contains(date) ? Completion.done :
-                                                    hb.notDone.contains(date) ? Completion.notDone :
-                                                    hb.missed.contains(date) ? Completion.missed :
-                                                    Completion.skipped)
+                                    if (bigWeekly) {
+                                        BigWeeklyHeader(hb: hb, showCateg: true)
+                                    } else {
+                                        SmallWeeklyHeader(hb: hb)
                                     }
+                                    Divider().padding(.horizontal, 5)
+                                    WeeklyView(dm: dm, hb: hb)
                                 }
-                                .center()
+                                .padding()
+                                .background(Color.background)
+                                .cornerRadius(10)
+                                .clipped()
+                                .frame(minHeight: 80)
                             }
-                            .padding()
-                            .background(Color.background)
-                            .cornerRadius(10)
-                            .clipped()
                         }
-                        .frame(minHeight: 80)
                     }
                     .padding(.bottom, 15)
                 }
@@ -180,11 +155,114 @@ struct StatsView: View {
         .modelContainer(for: [Habit.self, Category.self, Achievements.self], inMemory: true)
 }
 
+struct BigStreak: View {
+    var hb: Habit
+    var showCateg: Bool
+    var streak: Int
+    
+    var body: some View {
+        Rectangle()
+            .fill(Color.background)
+            .frame(height: UIScreen.main.bounds.width/2.8)
+            .cornerRadius(10)
+            .overlay {
+                HStack {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("\(streak)").cust(32, true)
+                                .baselineOffset(-10)
+                            Spacer()
+                            Image(systemName: hb.imageName)
+                                .resize(w: 24, h: 24)
+                        } // end hstack
+                        .padding(.top, -5)
+                        
+                        Spacer()
+                        if (showCateg) {
+                            Text("\(hb.category?.title ?? "")").text3()
+                                .foregroundColor(.darkgray)
+                                .padding(.bottom, -4)
+                        } else {
+                            Text("")
+                        }
+                        Text("\(hb.title)").text1()
+                    } // end vstack
+                    Spacer()
+                }.padding(.all, 18) // end hstack
+            }
+    }
+}
+
+struct SmallStreak: View {
+    var hb: Habit
+    var streak: Int
+    
+    var body: some View {
+        Rectangle()
+            .fill(Color.background)
+            .frame(height: UIScreen.main.bounds.width/7)
+            .cornerRadius(10)
+            .overlay {
+                HStack {
+                    Text("\(streak)").cust(30, true)
+                        .baselineOffset(-10)
+                    Spacer().frame(width: 20)
+                    Image(systemName: hb.imageName)
+                        .resize(w: 24, h: 24)
+                } // end hstack
+                .padding(.all, 18)
+            }
+    }
+}
+
+struct BigWeeklyHeader: View {
+    var hb: Habit
+    var showCateg: Bool
+    
+    var body: some View {
+        VStack {
+            if (hb.category != nil && showCateg) {
+                Text(hb.category?.title ?? "").text4().leading()
+                    .foregroundColor(.darkgray)
+                    
+            }
+            Text(hb.title).leading().text3()
+                .lineLimit(2)
+        }
+        .frame(width: 70)
+    }
+}
+
+struct SmallWeeklyHeader: View {
+    var hb: Habit
+    
+    var body: some View {
+        Image(systemName: hb.imageName)
+            .resize(w: 24, h: 24)
+            .frame(width: 70)
+    }
+}
+
+
+struct WeeklyView: View {
+    var dm: DateModel
+    var hb: Habit
+    
+    var body: some View {
+        HStack {
+            ForEach(dm.getThisWeek(), id: \.self) { date in
+                let weekday = dm.getWeekday(date: date, short: true)
+                HabitStack(habit: hb, date: date, weekday: weekday)
+            }
+        }
+        .center()
+    }
+}
+
 struct HabitStack: View {
     var habit: Habit
     var date: Date
     var weekday: String
-    var arr: Completion
     
     var body: some View {
         VStack {
@@ -192,13 +270,50 @@ struct HabitStack: View {
                 .cust(14, true)
                 .textCase(.uppercase)
                 .padding(.bottom, -2)
-            RoundedRectangle(cornerRadius: 15)
-                .frame(width: 26, height: 26)
-                .foregroundColor(arr == .notDone ? .grayshadow : (
-                        (arr == .done ? .grn :
-                        (arr == .missed ? .red : .blue)))
-                )
-        }.frame(width: 26)
+            if (habit.mergeWith != nil) {
+                let lcolor = self.getColor(hb: habit)
+                let rcolor = self.getColor(hb: habit.mergeWith!)
+                HalfColoredCircle(l: lcolor, r: rcolor)
+            } else {
+                let color = self.getColor(hb: habit)
+                HalfColoredCircle(l: color, r: color)
+            }
+        }
+        .frame(width: 26)
         .opacity(habit.weekdays.contains(weekday) ? 1 : 0.3)
+    }
+    func getColor(hb: Habit) -> Color {
+        if (hb.done.contains(date)) {
+            return Color.grn
+        } else if (hb.notDone.contains(date)) {
+            return Color.grayshadow
+        } else if (hb.missed.contains(date)) {
+            return Color.red
+        } else {
+            return Color.blue
+        }
+    }
+}
+
+
+struct HalfColoredCircle: View {
+    var l: Color
+    var r: Color
+    
+    var body: some View {
+        ZStack {
+            Rectangle()
+                .fill(l)
+                .frame(width: 26, height: 26)
+                .offset(x: -13)
+            
+            Rectangle()
+                .fill(r)
+                .frame(width: 26, height: 26)
+                .offset(x: 13)
+        }
+        .frame(width: 26, height: 26)
+        .clipShape(Circle())
+        .rotationEffect(.degrees(45))
     }
 }

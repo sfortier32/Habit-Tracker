@@ -10,7 +10,7 @@ import SwiftData
 
 struct SettingsView: View {
     @EnvironmentObject var tm: TabModel
-    @Environment (\.modelContext) var mc
+    @Environment(\.modelContext) var mc
     
     @State private var changeName = false
     @State private var resetDataAlert = false

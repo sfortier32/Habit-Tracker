@@ -96,6 +96,10 @@ struct HomeView: View {
             HabitView(editor: false, pageOpen: $addHabit, habit: nil)
                 .environmentObject(hInt)
         })
+        .sheet(isPresented: $hInt.duplicateHabit, content: {
+            HabitView(editor: false, pageOpen: $hInt.duplicateHabit, habit: hInt.habit)
+                .environmentObject(hInt)
+        })
         .sheet(isPresented: $hInt.openTimer, content: {
             TimerView(habit: hInt.habit, date: dateSelected)
                 .environmentObject(hInt)
@@ -129,7 +133,7 @@ struct HomeView: View {
     func getCount() -> Int {
         var cnt = 0
         for hb in habits {
-            if hb.dateAdded <= date && hb.weekdays.contains(selectedWeekday) {
+            if hb.dateAdded <= dateSelected && hb.weekdays.contains(selectedWeekday) {
                 cnt += 1
             }
         }

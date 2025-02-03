@@ -9,7 +9,7 @@ import SwiftUI
 
 extension View {
     // MARK: SwipeActions
-    func swipeThreeActions(hb: Habit, date: Date) -> some View {
+    func customSwipeActions(hb: Habit, date: Date) -> some View {
         return self
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
             Button() { // MARK: Done
