@@ -92,7 +92,8 @@ struct StatsView: View {
                                             SmallWeeklyHeader(hb: hb)
                                         }
                                         Divider().padding(.horizontal, 5)
-                                        WeeklyView(dm: dm, hb: hb)
+                                        WeeklyView(hb: hb)
+                                            .environmentObject(dm)
                                     }
                                     .padding()
                                     .background(Color.background)
@@ -108,7 +109,8 @@ struct StatsView: View {
                                         SmallWeeklyHeader(hb: hb)
                                     }
                                     Divider().padding(.horizontal, 5)
-                                    WeeklyView(dm: dm, hb: hb)
+                                    WeeklyView(hb: hb)
+                                        .environmentObject(dm)
                                 }
                                 .padding()
                                 .background(Color.background)
@@ -245,7 +247,7 @@ struct SmallWeeklyHeader: View {
 
 
 struct WeeklyView: View {
-    var dm: DateModel
+    @EnvironmentObject var dm: DateModel
     var hb: Habit
     
     var body: some View {
@@ -283,15 +285,16 @@ struct HabitStack: View {
         .opacity(habit.weekdays.contains(weekday) ? 1 : 0.3)
     }
     func getColor(hb: Habit) -> Color {
-        if (hb.done.contains(date)) {
-            return Color.grn
-        } else if (hb.notDone.contains(date)) {
-            return Color.grayshadow
-        } else if (hb.missed.contains(date)) {
-            return Color.red
-        } else {
-            return Color.blue
+        if (hb.weekdays.contains(weekday)) {
+            if (hb.done.contains(date)) {
+                return Color.grn
+            } else if (hb.missed.contains(date)) {
+                return Color.red
+            } else if (hb.skipped.contains(date)) {
+                return Color.blue
+            }
         }
+        return Color.grayshadow
     }
 }
 

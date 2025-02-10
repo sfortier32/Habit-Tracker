@@ -66,7 +66,7 @@ struct DateView: View {
                             .overlay {
                                 Text(day)
                                     .foregroundColor(.blck).header5()
-                                    .baselineOffset(-5)
+                                    .baselineOffset(-7)
                             }
                     }.padding(.bottom, -5)
                 }.frame(width: 50, height: 85)
